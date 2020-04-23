@@ -24,7 +24,7 @@ public :
   	}  // temps de cycle du réacteur
 
   	void SetMassHN(double Mass) {
-    fHeavyMetalMass = Mass;
+    fMassHN = Mass;
   	}  // défini le masse de noyaux fissiles au début du cycle
 
   	void Evolution(t);  // Evolution jusqu'à t 			-- A voir

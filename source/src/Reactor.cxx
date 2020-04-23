@@ -14,13 +14,13 @@ Reactor::Reactor(double StartingTime, double LifeTime, double power, double Mass
 {
   (*this).SetName("Reactor");
 
-  fStorage = 0;
-  fFabricationPlant = 0;
+  fStock = 0;
+  fEnrichmentPlant = 0;
   fLoadFactor = LoadFactor;
   fPower = power * fLoadFactor;
   fMassHN = MassHN;
   fBurnUp = BurnUp;
-  fCycleTime = (fBurnUp * 1e9 / (fPower)*fMassHN * 3600 * 24);
+  fCycleTime = (fBurnUp * 1e9 / (fPower)*fMassHN * 3600 * 24 * 365);
 
   // fScheduleHMMassEvolution.insert(vector<double>(fStartingTime, fMassHN));
 }
@@ -35,7 +35,7 @@ Reactor::~Reactor() {}
 ////////////////////////////////////////////////////////////////
 void Reactor::CalculateU5Enrichment(double fBurnUp)
 {
-	fMassHN = 0.0135139 + 0.000563569*fBurnUp + 1.34642e-06*fBurnUp; // fBurnUp en GWj/t
+	fMassHN = 0.0135139 + 0.000563569*fBurnUp + 1.34642e-06*fBurnUp*fBurnUp; // fBurnUp en GWj/t
 }
 
 
