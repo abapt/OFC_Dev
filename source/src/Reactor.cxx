@@ -1,7 +1,4 @@
 #include "Reactor.hxx"
-#include "EnrichmentPlant.hxx"
-#include "Scenario.hxx"
-#include "Storage.hxx"
 
 #include <cmath>
 #include <iostream>
@@ -20,9 +17,8 @@ Reactor::Reactor(double StartingTime, double LifeTime, double power, double Mass
   fPower = power * fLoadFactor;
   fMassHN = MassHN;
   fBurnUp = BurnUp;
-  fCycleTime = (fBurnUp * 1e9 / (fPower)*fMassHN * 3600 * 24 * 365);
 
-  // fScheduleHMMassEvolution.insert(vector<double>(fStartingTime, fMassHN));
+  fCycleTime = (fBurnUp * 1e9 / (fPower)*fMassHN * 3600 * 24);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -39,9 +35,10 @@ void Reactor::CalculateU5Enrichment(double fBurnUp)
 }
 
 
-
+/*
 	Evolution(T0){
 
 	N(t) = N(T0) * exp(- sigma phi t);
 
 	=> Modifier fMassU5Evolution et fMassU8Evolution
+*/

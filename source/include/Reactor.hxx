@@ -22,7 +22,9 @@ public :
  	double GetPower() const {
     return fPower;
   	}  // temps de cycle du réacteur
-
+  	void SetName(string Name){
+  		fName = Name;
+  	}
   	void SetMassHN(double Mass) {
     fMassHN = Mass;
   	}  // défini le masse de noyaux fissiles au début du cycle
@@ -31,12 +33,11 @@ public :
  	// void Dump();   Vider   							-- A voir 
   	// void SetNewFuel();   Remplace le combustible 		-- A voir dans scénario
 
-	void CalculateU5Enrichment;
-
-	Evolution(t);
+	void CalculateU5Enrichment();
 
 private :
 
+	double fName;
 	double fMassHN;
 	double fPower;
 	double fLoadFactor;
@@ -46,7 +47,4 @@ private :
 	double fLifeTime;
 	vector<double> fMassU5Evolution;					//-- A voir
 	vector<double> fMassU8Evolution;					//-- A voir
-
-	EnrichmentPlant* fEnrichmentPlant;  // Pointeur vers la FabricationPlant
-  	Storage* fStorage;  // Pointeur vers le Stock
 };
