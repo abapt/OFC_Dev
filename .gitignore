@@ -1,0 +1,35 @@
+bld
+BLD
+build
+BUILD
+# Latex files from compilation
+*.out
+*.log
+*.aux
+*.toc
+*.synctex.gz
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+# Precompiled Headers
+*.gch
+*.pch
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+# Fortran module files
+*.mod
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+# Executables
+*.exe
+*.ex
+*.out
+*.app
+*.pcm
