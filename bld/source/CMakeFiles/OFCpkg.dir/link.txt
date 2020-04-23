@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -std=c++11 -O3  -shared -Wl,-soname,libOFCpkg.so -o ../../lib/libOFCpkg.so CMakeFiles/OFCpkg.dir/src/Reactor.cxx.o 

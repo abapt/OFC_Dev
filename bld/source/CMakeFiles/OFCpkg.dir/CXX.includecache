@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/toto/WORK/CODE/OFC/OFC_Dev/source/src/Reactor.cxx
+Reactor.hxx
+/home/toto/WORK/CODE/OFC/OFC_Dev/source/src/Reactor.hxx
+
