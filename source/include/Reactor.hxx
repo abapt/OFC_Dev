@@ -1,7 +1,7 @@
-
 #include<vector>
 #include <string>
 
+using namespace std;
 
 class Reactor
 {
@@ -29,15 +29,15 @@ public :
     fMassHN = Mass;
   	}  // défini le masse de noyaux fissiles au début du cycle
 
-  	void Evolution(t);  // Evolution jusqu'à t 			-- A voir
+  	void Evolution(int t);  // Evolution jusqu'à t 			-- A voir
  	// void Dump();   Vider   							-- A voir 
   	// void SetNewFuel();   Remplace le combustible 		-- A voir dans scénario
 
-	void CalculateU5Enrichment();
+	void CalculateU5Enrichment(double fBurnUp);
 
 private :
 
-	double fName;
+	string fName;
 	double fMassHN;
 	double fPower;
 	double fLoadFactor;

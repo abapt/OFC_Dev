@@ -1,18 +1,14 @@
 #include "Reactor.hxx"
 
-#include <cmath>
 #include <iostream>
 
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 Reactor::Reactor(double StartingTime, double LifeTime, double power, double MassHN,double BurnUp, 
-				double LoadFactor):
-{
+				double LoadFactor) {
   (*this).SetName("Reactor");
 
-  fStock = 0;
-  fEnrichmentPlant = 0;
   fLoadFactor = LoadFactor;
   fPower = power * fLoadFactor;
   fMassHN = MassHN;
@@ -29,8 +25,7 @@ Reactor::~Reactor() {}
 ////////////////////////////////////////////////////////////////
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-void Reactor::CalculateU5Enrichment(double fBurnUp)
-{
+void Reactor::CalculateU5Enrichment(double fBurnUp) {
 	fMassHN = 0.0135139 + 0.000563569*fBurnUp + 1.34642e-06*fBurnUp*fBurnUp; // fBurnUp en GWj/t
 }
 
