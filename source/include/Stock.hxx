@@ -6,14 +6,14 @@ using namespace std;
 class Stock
 {
 public :
-	Stock();
-	~Stock();
+	Stock(); //Constructeur simple
+	~Stock(); //Destructeur
 
 	void SetName(string Name){
 		fName = Name;
 	}
 
-	void Evolution(int t);
+	/*void Evolution(int t);*/
 
 private :
 
