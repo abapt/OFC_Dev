@@ -14,6 +14,12 @@ public :
 	        double fLoadFactor); //Constructeur
 	~Reactor(); //Destructeur
 
+	int GetStartingTime() const {
+		return fStartingTime;
+	}
+	int GetLifeTime() const {
+		return fLifeTime;
+	}
 	double GetMassHN() const {
 		return fMassHN;
 	}  // Masse de noyaux lourds au début du cycle
@@ -32,6 +38,9 @@ public :
 	double GetCrossSection() const {
 		return fCrossSection;
 	}
+	void SetStartingTime(int StartingTime) {
+		fStartingTime = StartingTime;
+	}
 	void SetName(string Name) {
 		fName = Name;
 	}
@@ -46,12 +55,16 @@ public :
 private :
 
 	string fName;
+
+	int fStartingTime;
+
 	double fMassHN;
 	double fPower;
 	double fLoadFactor;
 	double fBurnUp;
-	double fCycleTime;
-	double fLifeTime;
+	int fCycleTime;
+	int fLifeTime;
+
 	double fEnrichissement;
 	double fCrossSection;
 

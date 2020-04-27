@@ -74,8 +74,12 @@ void Reactor::Evolution(double fCycleTime) {
       i++;
     } while (i<fLifeTime);
   */
-}
 
-void Reactor::BuildStatusVector(double fCycleTime) {
+/*
+
+  Dump();
+
+*/
+
 
 }

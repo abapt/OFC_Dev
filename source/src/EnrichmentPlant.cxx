@@ -29,3 +29,5 @@ void EnrichmentPlant::CalculateRendement() {
 fNeededUenrMassesByReactorLoading = Reactor->GetMassHN()
 fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading / Rendement
 fNeededUappMassesByReactorLoading = fNeededUnatMassesByReactorLoading - fNeededUenrMassesByReactorLoading
+
+

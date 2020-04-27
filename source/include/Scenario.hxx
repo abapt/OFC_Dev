@@ -10,32 +10,47 @@ class EnrichmentPlant;
 class Scenario
 {
 public :
-	Scenario(double startingTime);
+	Scenario(int startingTime);
 	~Scenario();
 
-	double GetStartingTime() const{
+	int GetStartingTime() const{
 		return fStartingTime;
 	}
-	double GetEndingTime() const{
+	int GetScenarioTime() const{
+		return fScenarioTime;
+	}
+	int GetEndingTime() const{
 		return fEndingTime;
 	}
-	double SetStartingTime(double ZeroTime) {
-		fStartingTime = ZeroTime;
+	void SetStartingTime(int StartingTime) {
+		fStartingTime = StartingTime;
 	}
-	double SetScenarioTime(double EndTime) {
-		fEndingTime = EndTime;
+	void SetScenarioTime(int ScenarioTime) {
+		fScenarioTime = ScenarioTime;
+	}
+	void SetEndingTime(int EndingTime) {
+		fEndingTime = EndingTime;
 	}
 
-	void StatusVectorBuild(double time);
+	void AddReactor(Reactor* reactor);
+	void AddStock(Stock* stock);
+	void AddEnrichmentPlant(EnrichmentPlant* enrichmentplant);
+
+	void BuildStatusVector(); // Build the time vector with facilities status event
 	void Evolution();  // Evolution
   	void ReactorEvolution();           // Reactor Evolution
   	void EnrichmentPlantEvolution();  // EnrichmentPlant Evolution
   	void StockEvolution();           // Stock Evolution
 
 private :
-	vector<int> fStatus; // statut des unités
-	double fStartingTime; // début de simulation (an)
-	double fEndingTime; // fin de simulation (an)
+
+	vector<int> fStatus; // Events status
+
+	int fStartingTime; // début de simulation (an)
+	int fEndingTime; // fin de simulation (an)
+	int fScenarioTime; // Durée de la simulation (an)
+
+
 	vector<Stock*> fStock; // Vecteur Stock
   	vector<Reactor*> fReactor; // Vecteur Reactor          
   	vector<EnrichmentPlant*> fEnrichmentPlant; // Vecteur EnrichmentPlant
