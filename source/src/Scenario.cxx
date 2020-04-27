@@ -50,18 +50,18 @@ void Scenario::StatusVectorBuild(double fStartingTime,
 								 double fEndingTime){
 	double fTime = fStartingTime - fEndingTime;
 	vector<int> fStatus = vector<int> (fTime,0);
+	
+	// Status of the reactor
+	// 0 : Nothing
+	// 1 : Fresh Fuel Loading
+	// 2 : Spent Fuel Pushing
+	// 4 : Evolution
+	vector <int> fStatus;
 
 
 }
 
 void Scenario::Evolution(int t){
 StatusVectorBuild(t);
-
-// Status of the reactor
-	// 0 : Nothing
-	// 1 : Fresh Fuel Loading
-	// 2 : Spent Fuel Pushing
-	// 4 : Evolution
-	vector <int> fStatus;
 
 }
