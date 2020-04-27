@@ -1,4 +1,4 @@
-/* #include<vector>
+#include<vector>
 #include <string>
 
 using namespace std;
@@ -7,17 +7,23 @@ using namespace std;
 class EnrichmentPlant
 {
 public :
-	EnrichmentPlant(); //Constructeur simple
+	EnrichmentPlant(double WasteU5Content); //Constructeur simple
 	~EnrichmentPlant(); //Destructeur
 
 	void SetName(string Name){
 		fName = Name;
 	}
 
-	Set
+	double GetUnatEachLoad() const {
+		return fNeededUnatMassesByReactorLoading;
+	}	
+	double GetUappEachLoad() const {
+		return fNeededUappMassesByReactorLoading;
+	}
+	double GetUenrEachLoad() const {
+		return fNeededUenrMassesByReactorLoading;
+	}
 
-	Get
-	
 	void CalculateRendement();
 
 	void CalculateNeededMasses();
@@ -26,12 +32,12 @@ private :
 	vector<double> fMassU5Evolution;
 	vector<double> fMassU8Evolution;
 
-	double fU5ContentInUapp = 0.003;
+	string fName;
+	double fU5ContentInUapp;
 	double fU5ContentInUenr;
-	double fU5ContentInUnat = 0.0072;
+	double fU5ContentInUnat;
 	double fRendement;
 	double fNeededUenrMassesByReactorLoading;
 	double fNeededUappMassesByReactorLoading;
 	double fNeededUnatMassesByReactorLoading;
 };
-*/

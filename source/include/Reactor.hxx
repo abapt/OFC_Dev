@@ -7,7 +7,10 @@ class Reactor
 {
 public :
 	Reactor(); //Constructeur simple
-	Reactor(double fStartingTime, double fLifeTime, double fPower, double fMassHN, double fBurnUp,
+	Reactor(double fLifeTime, 
+			double fPower, 
+			double fMassHN, 
+			double fBurnUp,
 	        double fLoadFactor); //Constructeur
 	~Reactor(); //Destructeur
 
@@ -37,12 +40,9 @@ public :
 	}  // défini le masse de noyaux fissiles au début du cycle
 
 	void Evolution(double t);  // Evolution jusqu'à t 			-- A voir
-	// void Dump();   Vider   							-- A voir
-	// void SetNewFuel();   Remplace le combustible 		-- A voir dans scénario
 
 	void CalculateU5Enrichment(double fBurnUp);
 
-	void BuildStatusVector();
 private :
 
 	string fName;
@@ -51,17 +51,9 @@ private :
 	double fLoadFactor;
 	double fBurnUp;
 	double fCycleTime;
-	double fStartingTime;
 	double fLifeTime;
 	double fEnrichissement;
 	double fCrossSection;
-
-	// Status of the reactor
-	// 0 : Nothing
-	// 1 : Fresh Fuel Loading
-	// 2 : Spent Fuel Pushing
-	// 4 : Evolution
-	vector <int> fstatus;
 
 	//Evolution data
 	vector<double> fFlux;

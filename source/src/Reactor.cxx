@@ -6,11 +6,15 @@
 ///////// Constructeur /////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 Reactor::Reactor() {
+  fLoadFactor = 0.75;
+  fPower = 3e9 * fLoadFactor;
+  fMassHN = 100;
+  fBurnUp = 35;
+  fLifeTime = 50;
   (*this).SetName("Reactor");
 }
 
-Reactor::Reactor(double StartingTime,
-                 double LifeTime,
+Reactor::Reactor(double LifeTime,
                  double power,
                  double MassHN,
                  double BurnUp,
@@ -24,8 +28,6 @@ Reactor::Reactor(double StartingTime,
   fLifeTime = LifeTime;
 
   fCycleTime = (fBurnUp * 1e9 / fPower) * (fMassHN * 24);
-
-  BuildStatusVector();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -40,8 +42,10 @@ void Reactor::CalculateU5Enrichment(double fBurnUp) {
   fMassHN = 0.0135139 + 0.000563569 * fBurnUp + 1.34642e-06 * fBurnUp * fBurnUp; // fBurnUp en GWj/t
 }
 
+
 void Reactor::Evolution(double fCycleTime) {
   /*
+  flux
   FIT PWR - 3.26% en U5
   p0                        =   2.4807e+14   +/-   1.17036e+12
   p1                        =   4.6258e+13   +/-   1.36441e+12

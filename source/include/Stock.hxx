@@ -6,7 +6,9 @@ using namespace std;
 class Stock
 {
 public :
-	Stock(); //Constructeur simple
+	Stock();
+	Stock(double fMassUNat,
+		  double fMineU5UContent); //Constructeur
 	~Stock(); //Destructeur
 
 	void SetName(string Name){
@@ -18,6 +20,8 @@ public :
 private :
 
 	string fName;
+	double fMassUNat;
+	double fMineU5UContent;
 
 	vector<double> fMassU5Evolution;
 	vector<double> fMassU8Evolution;
