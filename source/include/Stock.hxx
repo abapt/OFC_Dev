@@ -3,6 +3,9 @@
 
 using namespace std;
 
+class EnrichmentPlant;
+class Scenario;
+
 class Stock
 {
 public :
@@ -14,8 +17,26 @@ public :
 	void SetName(string Name){
 		fName = Name;
 	}
+	void PrelevementEPUnat(int t);
 
-	/*void Evolution(int t);*/
+	vector<double> GetMassU5Waste() {
+		return fMassU5Waste;
+	}
+	vector<double> GetMassU8Waste() {
+		return fMassU8Waste;
+	}
+	vector<double> GetMassU5App() {
+		return fMassU5App;
+	}
+	vector<double> GetMassU8App() {
+		return fMassU8App;
+	}
+	vector<double> GetMassU5Nat() {
+		return fMassU5Nat;
+	}
+	vector<double> GetMassU8Nat() {
+		return fMassU8Nat;
+	}
 
 private :
 
@@ -23,6 +44,12 @@ private :
 	double fMassUNat;
 	double fMineU5UContent;
 
-	vector<double> fMassU5Evolution;
-	vector<double> fMassU8Evolution;
+	vector<double> fMassU5App;
+	vector<double> fMassU8App;
+
+	vector<double> fMassU5Nat;
+	vector<double> fMassU8Nat;
+
+	vector<double> fMassU5Waste;
+	vector<double> fMassU8Waste;
 };

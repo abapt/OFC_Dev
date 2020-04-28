@@ -3,6 +3,9 @@
 
 using namespace std;
 
+class Stock;
+class EnrichmentPlant;
+
 class Reactor
 {
 public :
@@ -52,23 +55,21 @@ public :
 		fMassHN = Mass;
 	}  // défini le masse de noyaux fissiles au début du cycle
 
-	void Evolution(double t);  // Evolution jusqu'à t 			-- A voir
+	void Evolution(int t);
 
 	void CalculateU5Enrichment(double fBurnUp);
 
 private :
 
 	string fName;
-
 	int fStartingTime;
+	int fCycleTime;
+	int fLifeTime;
 
 	double fMassHN;
 	double fPower;
 	double fLoadFactor;
 	double fBurnUp;
-	int fCycleTime;
-	int fLifeTime;
-
 	double fEnrichissement;
 	double fCrossSection;
 

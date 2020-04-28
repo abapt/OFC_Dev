@@ -1,7 +1,10 @@
 #include "EnrichmentPlant.hxx"
+#include "Stock.hxx"
+#include "Reactor.hxx"
 
 #include <iostream>
 #include <string>
+using namespace std;
 
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////

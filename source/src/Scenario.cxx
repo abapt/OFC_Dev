@@ -43,17 +43,18 @@ void Scenario::ReactorEvolution(){
 	}
 }
 // -----------------------------------------------------------
-void Scenario::EnrichmentPlantEvolution(){
+/*void Scenario::EnrichmentPlantEvolution(){
 	for (int i=0; i<(int)fEnrichmentPlant.size(); ++i)
 	{
-		fEnrichmentPlant[i]->GiveReactor();
+		fEnrichmentPlant[i]->GiveReactorUenr();
+		fEnrichmentPlant[i]->PushUapp();
 	}
-}
+}*/
 // -----------------------------------------------------------
 void Scenario::StockEvolution(){
 	for (int i=0; i<(int)fStock.size(); ++i)
 	{
-		fStock[i]->PrelevementEP();
+		fStock[i]->PrelevementEPUnat(fScenarioTime);
 	}
 }
 
@@ -63,16 +64,27 @@ void Scenario::Evolution(int t){
 // ----------  Status Loop ----------  //
 	for (t=0; t<fScenarioTime; ++t)
 	{
-		if (fStatus == 0) {}
-		if (fStatus == 1) {}
-		if (fStatus == 2) {ReactorEvolution()}
-		if (fStatus == 4) {}
+		if (fStatus[t] == 0) {
+			ReactorEvolution();
+		}
+		if (fStatus[t] == 1) {
+			ReactorEvolution();
+		}
+		if (fStatus[t] == 2) 
+		{
+			ReactorEvolution();
+			// EnrichmentPlantEvolution();
+			StockEvolution();
+		}
+		if (fStatus[t] == 4) {
+			ReactorEvolution();
+		}
 	}
 
 }
 
 //-----------------------------------------------------------
-void Scenario::BuildStatusVector(){
+void Scenario::BuildStatusVector(int t){
   // Status of the events
   // 0 nothing
   // 1 reactor Starting
@@ -90,7 +102,10 @@ void Scenario::BuildStatusVector(){
 // ----------  Reactor Loop ----------  //
 	if (i == R_StartingTime) {fStatus[i] += 1;}
 	if (i == R_ShutdownTime) {fStatus[i] += 4;}
-	if ((i-R_StartingTime)%R_CycleTime == 0) {fStatus[i] += 2;} //A voir
+	if ((i-R_StartingTime)%R_CycleTime == 0 && i != R_StartingTime) 
+	{
+		fStatus[i] += 2;
+	} //A voir
 
   }
 }

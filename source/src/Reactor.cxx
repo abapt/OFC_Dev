@@ -1,6 +1,10 @@
 #include "Reactor.hxx"
+#include "Stock.hxx"
+#include "EnrichmentPlant.hxx"
 
 #include <iostream>
+#include<math.h>
+using namespace std;
 
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////
@@ -43,7 +47,16 @@ void Reactor::CalculateU5Enrichment(double fBurnUp) {
 }
 
 
-void Reactor::Evolution(double fCycleTime) {
+void Reactor::Evolution(int t) {
+  int StartingTime = GetStartingTime();
+  int LifeTime = GetLifeTime();
+  if (t<StartingTime) {
+    return;
+  }
+  if (t>StartingTime+LifeTime) {
+    return;
+  }
+
   /*
   flux
   FIT PWR - 3.26% en U5
@@ -57,29 +70,19 @@ void Reactor::Evolution(double fCycleTime) {
   p2                        = -8.50596e+11   +/-   5.27476e+11
   */
 
-  /*
-    int i(0);
-    do
-    {
-      fFlux[i]= 4.10569e15 - 8.75127e10*i + 5.31149e6*i*i - 142.44206*i*i*i + 0.00204*i*i*i*i - 1.55273e-8*i*i*i*i*i + 4.9082e-14*i*i*i*i*i*i;
-      if (i%fCycleTime==0)
-      {
-        fMassU5Evolution[i] = fMassHN ;
-        fMassU8Evolution[i] = fMassHN/fEnrichissement;
-      }
-      else
-      {
-        fMassU5Evolution[i] = fMassU5Evolution[i-1]*exp(-fFlux[i]*fCrossSection*(365*24*60*60));
-      }
-      i++;
-    } while (i<fLifeTime);
-  */
+  for (int i=1; i<=fCycleTime; ++i) fFlux.push_back(0);
+  for (int j=1; j<=fCycleTime; ++j)
+  {
+  fMassU5Evolution[0]= EnrichmentPlant->GiveReactorUenr();
+    fFlux[j]= 2.28774e+14 + 3.81756e+13*j -8.50596e+11*j*j;
+    fMassU5Evolution[j] = fMassHN*exp(-fFlux[j]*fCrossSection*(j*365*24*60*60));;
+    fMassU8Evolution[j] = fMassHN - fMassU5Evolution[j];
+  }
 
-/*
-
-  Dump();
-
-*/
-
-
+  /*if ((t-StartingTime)%LifeTime == 0 && t != StartingTime)
+  {
+    // Créer un vecteur lié à U5Waste de Stock
+    U5Stock[t] += fMassU5Waste[t];
+    U8Stock[t] += fMassU8Waste[t];
+  }*/
 }
