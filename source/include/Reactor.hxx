@@ -38,6 +38,10 @@ public :
 	double GetCrossSection() const {
 		return fCrossSection;
 	}
+	int GetCycleTime() {
+		return fCycleTime;
+	}
+
 	void SetStartingTime(int StartingTime) {
 		fStartingTime = StartingTime;
 	}

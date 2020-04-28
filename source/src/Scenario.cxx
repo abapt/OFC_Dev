@@ -1,4 +1,8 @@
 #include"Scenario.hxx"
+#include"Stock.hxx"
+#include"Reactor.hxx"
+#include"EnrichmentPlant.hxx"
+
 #include<vector>
 #include<string>
 
@@ -42,10 +46,6 @@ void Scenario::ReactorEvolution(){
 void Scenario::EnrichmentPlantEvolution(){
 	for (int i=0; i<(int)fEnrichmentPlant.size(); ++i)
 	{
-		fEnrichmentPlant[i]->Evolution();
-	}
-	for (int i=0; i<(int)fEnrichmentPlant.size(); ++i)
-	{
 		fEnrichmentPlant[i]->GiveReactor();
 	}
 }
@@ -56,9 +56,22 @@ void Scenario::StockEvolution(){
 		fStock[i]->PrelevementEP();
 	}
 }
+
+//-----------------------------------------------------------
 void Scenario::Evolution(int t){
+	BuildStatusVector(t);
+// ----------  Status Loop ----------  //
+	for (t=0; t<fScenarioTime; ++t)
+	{
+		if (fStatus == 0) {}
+		if (fStatus == 1) {}
+		if (fStatus == 2) {ReactorEvolution()}
+		if (fStatus == 4) {}
+	}
+
 }
 
+//-----------------------------------------------------------
 void Scenario::BuildStatusVector(){
   // Status of the events
   // 0 nothing
@@ -66,10 +79,20 @@ void Scenario::BuildStatusVector(){
   // 2 reactor new cycle
   // 4 reactor ShutDown
 
-  for (t(0); t<fScenarioTime; t++) fStatus.push_back(0);
+  for (int t=0; t<fScenarioTime; ++t) fStatus.push_back(0);
+  for (int i=0; i<fReactor.size(); ++i)
+  {
+  	int R_StartingTime = fReactor[i]->GetStartingTime();
+  	int R_ShutdownTime = (fReactor[i]->GetStartingTime())+
+  				 	 	 (fReactor[i]->GetLifeTime());
+  	int R_CycleTime = fReactor[i]->GetCycleTime();
 
-  // loop on reactors
-  // => Reactor Add 1 
+// ----------  Reactor Loop ----------  //
+	if (i == R_StartingTime) {fStatus[i] += 1;}
+	if (i == R_ShutdownTime) {fStatus[i] += 4;}
+	if ((i-R_StartingTime)%R_CycleTime == 0) {fStatus[i] += 2;} //A voir
+
+  }
 }
 
 

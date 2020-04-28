@@ -32,12 +32,22 @@ public :
 		fEndingTime = EndingTime;
 	}
 
+	vector<Reactor*> GetReactor() {
+    	return fReactor;  
+  	}
+  	vector<Stock*> GetStock() {
+    	return fStock;  
+ 	 }
+  	vector<EnrichmentPlant*> GetEnrichmentPlant() {
+    	return fEnrichmentPlant;  
+    }
+
 	void AddReactor(Reactor* reactor);
 	void AddStock(Stock* stock);
 	void AddEnrichmentPlant(EnrichmentPlant* enrichmentplant);
 
 	void BuildStatusVector(); // Build the time vector with facilities status event
-	void Evolution();  // Evolution
+	void Evolution(int t);  // Evolution
   	void ReactorEvolution();           // Reactor Evolution
   	void EnrichmentPlantEvolution();  // EnrichmentPlant Evolution
   	void StockEvolution();           // Stock Evolution
