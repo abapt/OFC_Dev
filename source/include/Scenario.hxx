@@ -7,19 +7,18 @@ class Reactor;
 class Stock;
 class EnrichmentPlant;
 
-class Scenario
-{
+class Scenario {
 public :
 	Scenario(int startingTime);
 	~Scenario();
-
-	int GetStartingTime() const{
+	
+	int GetStartingTime() const {
 		return fStartingTime;
 	}
-	int GetScenarioTime() const{
+	int GetScenarioTime() const {
 		return fScenarioTime;
 	}
-	int GetEndingTime() const{
+	int GetEndingTime() const {
 		return fEndingTime;
 	}
 	void SetStartingTime(int StartingTime) {
@@ -31,37 +30,37 @@ public :
 	void SetEndingTime(int EndingTime) {
 		fEndingTime = EndingTime;
 	}
-
+	
 	vector<Reactor*> GetReactor() {
-    	return fReactor;  
-  	}
-  	vector<Stock*> GetStock() {
-    	return fStock;  
- 	 }
-  	vector<EnrichmentPlant*> GetEnrichmentPlant() {
-    	return fEnrichmentPlant;  
-    }
-
+		return fReactor;
+	}
+	vector<Stock*> GetStock() {
+		return fStock;
+	}
+	vector<EnrichmentPlant*> GetEnrichmentPlant() {
+		return fEnrichmentPlant;
+	}
+	
 	void AddReactor(Reactor* reactor);
 	void AddStock(Stock* stock);
 	void AddEnrichmentPlant(EnrichmentPlant* enrichmentplant);
-
+	
 	void BuildStatusVector(); // Build the time vector with facilities status event
 	void Evolution(int t);  // Evolution
-  	void ReactorEvolution();           // Reactor Evolution
-  	void EnrichmentPlantEvolution();  // EnrichmentPlant Evolution
-  	void StockEvolution();           // Stock Evolution
-
+	void ReactorEvolution();           // Reactor Evolution
+	void EnrichmentPlantEvolution();  // EnrichmentPlant Evolution
+	void StockEvolution();           // Stock Evolution
+	
 private :
 
 	vector<int> fStatus; // Events status
-
+	
 	int fStartingTime; // début de simulation (an)
 	int fEndingTime; // fin de simulation (an)
 	int fScenarioTime; // Durée de la simulation (an)
-
-
+	
+	
 	vector<Stock*> fStock; // Vecteur Stock
-  	vector<Reactor*> fReactor; // Vecteur Reactor          
-  	vector<EnrichmentPlant*> fEnrichmentPlant; // Vecteur EnrichmentPlant
+	vector<Reactor*> fReactor; // Vecteur Reactor
+	vector<EnrichmentPlant*> fEnrichmentPlant; // Vecteur EnrichmentPlant
 };

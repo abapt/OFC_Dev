@@ -4,34 +4,33 @@
 using namespace std;
 
 
-class EnrichmentPlant
-{
+class EnrichmentPlant {
 public :
 	EnrichmentPlant(double WasteU5Content); //Constructeur simple
 	~EnrichmentPlant(); //Destructeur
-
-	void SetName(string Name){
+	
+	void SetName(string Name) {
 		fName = Name;
 	}
-
+	
 	double GetUnatEachLoad() const {
 		return fNeededUnatMassesByReactorLoading;
-	}	
+	}
 	double GetUappEachLoad() const {
 		return fNeededUappMassesByReactorLoading;
 	}
 	double GetUenrEachLoad() const {
 		return fNeededUenrMassesByReactorLoading;
 	}
-
+	
 	void CalculateRendement();
-
+	
 	void CalculateNeededMasses();
-
-private : 
+	
+private :
 	vector<double> fMassU5Evolution;
 	vector<double> fMassU8Evolution;
-
+	
 	string fName;
 	double fU5ContentInUapp;
 	double fU5ContentInUenr;

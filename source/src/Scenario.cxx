@@ -64,7 +64,7 @@ void Scenario::Evolution(int t) {
 	for(t = 0; t < fScenarioTime; ++t) {
 	
 		if(fStatus[t] == 0) {
-			ReactorEvolution(); // Evolution under neutron flux
+			ReactorEvolution(t); // Evolution under neutron flux
 		}
 
 		if(fStatus[t] == 1) {
@@ -72,6 +72,7 @@ void Scenario::Evolution(int t) {
 		}
 		
 		if(fStatus[t] == 2) {
+			ReactorEvolution(t); // Evolution under neutron flux
 			ReactorDrainFuel(); // Push spent uox in stock
 			FuelEnrichment();   // Take Feed and Push Uapp and Keep Uenr
 			ReactorLoadFuel();  // Take Uenr from EP
@@ -83,6 +84,7 @@ void Scenario::Evolution(int t) {
 		}
 		
 		if(fStatus[t] == 4) {
+			ReactorEvolution(t); // Evolution under neutron flux
 			ReactorDrainFuel(); // Push spent uox in stock
 		}
 	}
