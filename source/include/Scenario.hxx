@@ -46,7 +46,7 @@ public :
 	void AddStock(Stock* stock);
 	void AddEnrichmentPlant(EnrichmentPlant* enrichmentplant);
 
-	void BuildStatusVector(int t); // Build the time vector with facilities status event
+	void BuildStatusVector(); // Build the time vector with facilities status event
 	void Evolution(int t);  // Evolution
   	void ReactorEvolution();           // Reactor Evolution
   	void EnrichmentPlantEvolution();  // EnrichmentPlant Evolution
