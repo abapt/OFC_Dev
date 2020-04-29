@@ -25,15 +25,19 @@ EnrichmentPlant::~EnrichmentPlant() {}
 ////////////////////////////////////////////////////////////////
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-void EnrichmentPlant::CalculateRendement() {
+double EnrichmentPlant::CalculateRendement() {
   fRendement = (fU5ContentInUnat - fU5ContentInUapp) / (fU5ContentInUenr - fU5ContentInUapp);
 }
 
-fNeededUenrMassesByReactorLoading = Reactor->GetMassHN();
-fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading/ 
-									fRendement;
-fNeededUappMassesByReactorLoading = fNeededUnatMassesByReactorLoading-
-                                    fNeededUenrMassesByReactorLoading;
+double CalculateNeededMasses() {
+	double Rendement = GetRendement();
+
+	double fNeededUenrMassesByReactorLoading = fReactor->GetMassHN();
+	double fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading/ 
+											   Rendement;
+	double fNeededUappMassesByReactorLoading = fNeededUnatMassesByReactorLoading-
+                                    		   fNeededUenrMassesByReactorLoading;
+}
 
 void EnrichmentPlant::FuelNatLoad(int t) {
 	vector<double> fMassU5NatMine = fStock->GetMassU5Nat();

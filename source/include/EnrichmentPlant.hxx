@@ -6,6 +6,10 @@
 
 using namespace std;
 
+class Reactor;
+class Scenario;
+class Stock;
+
 class EnrichmentPlant {
 public :
 	EnrichmentPlant(double WasteU5Content); //Constructeur simple
@@ -15,13 +19,13 @@ public :
 		fName = Name;
 	}
 	
-	double GetUnatEachLoad() const {
+	double GetUnatEachLoad(){
 		return fNeededUnatMassesByReactorLoading;
 	}
-	double GetUappEachLoad() const {
+	double GetUappEachLoad() {
 		return fNeededUappMassesByReactorLoading;
 	}
-	double GetUenrEachLoad() const {
+	double GetUenrEachLoad(){
 		return fNeededUenrMassesByReactorLoading;
 	}
 	double GetRendement() {
@@ -47,8 +51,8 @@ public :
     	return fMassU8Enr;
   	}
 	
-	void CalculateRendement();
-	void CalculateNeededMasses();
+	double CalculateRendement();
+	double CalculateNeededMasses();
 
 	void FuelNatLoad(int t); 
 	void FuelConversion(int t);
