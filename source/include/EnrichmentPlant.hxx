@@ -58,7 +58,7 @@ public :
 	void PushUApp(int t);
 	
 private :
-	vector<double> fMassU5Enr;
+	vector<double> fMassU5Enr; // AMount of U5 
 	vector<double> fMassU8Enr;
 
 	vector<double> fMassU5App;

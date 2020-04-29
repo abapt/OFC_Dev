@@ -41,10 +41,8 @@ void EnrichmentPlant::FuelNatLoad(int t) {
 	vector<double> fMassU8NatMine = fStock->GetMassU8Nat();
 
 
-	fMassU5Nat[t-2] = fNeededUnatMassesByReactorLoading*
-					  fU5ContentInUnat;
-	fMassU8Nat[t-2] = fNeededUnatMassesByReactorLoading/
-					  (1-fU5ContentInUnat);
+	fMassU5Nat[t-2] = fNeededUnatMassesByReactorLoading*fU5ContentInUnat;
+	fMassU8Nat[t-2] = fNeededUnatMassesByReactorLoading/(1-fU5ContentInUnat);
 	fMassU5NatMine[t-2] -= fMassU5Nat[t-2];
 	fMassU8NatMine[t-2] -= fMassU8Nat[t-2];
 	fMassU5Enr[t-2] = 0;

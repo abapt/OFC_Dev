@@ -44,8 +44,8 @@ Reactor::~Reactor() {}
 ////////////////////////////////////////////////////////////////
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-void Reactor::CalculateU5Enrichment(double fBurnUp) {
-  fMassHN = 0.0135139 + 0.000563569 * fBurnUp + 1.34642e-06 * fBurnUp * fBurnUp; // fBurnUp en GWj/t
+void Reactor::CalculateU5Enrichment(double BurnUp) {
+  fEnrichissement = 0.0135139 + 0.000563569 * BurnUp + 1.34642e-06 * BurnUp * BurnUp; // fBurnUp en GWj/t
 }
 
 
@@ -88,10 +88,13 @@ void Reactor::Evolution(int t) {
   }
 
 void Reactor::Start(int t){
-  double RendementEnrichment = fEnrichmentPlant->GetRendement();
+  CalculateU5Enrichment(fBurnUp)  
 
-  fMassU5Evolution[t] = fMassHN;
-  fMassU8Evolution[t] = fMassHN/RendementEnrichment;
+  // Fill Reactor
+  fMassU5Evolution[t] = fMassHN * fEnrichissement;
+  fMassU8Evolution[t] = fMassHN * (1 - fEnrichissement);
+
+
 }
 
 void Reactor::Drain(int t){
