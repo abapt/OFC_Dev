@@ -15,6 +15,9 @@ EnrichmentPlant::EnrichmentPlant(double WasteU5Content) {
   fU5ContentInUnat = 0.0072;
   fU5ContentInUenr = WasteU5Content;
   SetName("EnrichmentPlant.");
+
+  fRendement = (fU5ContentInUnat - fU5ContentInUapp) / 
+  			   (fU5ContentInUenr - fU5ContentInUapp);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -25,18 +28,12 @@ EnrichmentPlant::~EnrichmentPlant() {}
 ////////////////////////////////////////////////////////////////
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-double EnrichmentPlant::CalculateRendement() {
-  fRendement = (fU5ContentInUnat - fU5ContentInUapp) / (fU5ContentInUenr - fU5ContentInUapp);
-}
-
-double CalculateNeededMasses() {
-	double Rendement = GetRendement();
-
-	double fNeededUenrMassesByReactorLoading = fReactor->GetMassHN();
-	double fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading/ 
-											   Rendement;
-	double fNeededUappMassesByReactorLoading = fNeededUnatMassesByReactorLoading-
-                                    		   fNeededUenrMassesByReactorLoading;
+double EnrichmentPlant::CalculateNeededMasses() {
+	fNeededUenrMassesByReactorLoading = fReactor->GetMassHN();
+	fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading/ 
+										fRendement;
+	fNeededUappMassesByReactorLoading = fNeededUnatMassesByReactorLoading-
+                                        fNeededUenrMassesByReactorLoading;
 }
 
 void EnrichmentPlant::FuelNatLoad(int t) {

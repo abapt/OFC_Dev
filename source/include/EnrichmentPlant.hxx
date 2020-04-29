@@ -50,8 +50,7 @@ public :
   	vector<double> GetMassU8Enr() {
     	return fMassU8Enr;
   	}
-	
-	double CalculateRendement();
+
 	double CalculateNeededMasses();
 
 	void FuelNatLoad(int t); 
