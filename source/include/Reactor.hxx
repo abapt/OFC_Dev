@@ -1,3 +1,6 @@
+#ifndef _Reactor_
+#define _Reactor_
+
 #include<vector>
 #include <string>
 
@@ -55,6 +58,10 @@ public :
 	}  // défini le masse de noyaux fissiles au début du cycle
 	
 	void Evolution(int t);
+	void Start(int t);
+	void Drain(int t);
+	void Load(int t);
+	void Push(int t);
 	
 	void CalculateU5Enrichment(double fBurnUp);
 	
@@ -71,9 +78,14 @@ private :
 	double fBurnUp;
 	double fEnrichissement;
 	double fCrossSection;
+
+	Stock* fStock;
+	EnrichmentPlant* fEnrichmentPlant;
 	
 	//Evolution data
-	vector<double> fFlux;
-	vector<double> fMassU5Evolution;					//-- A voir
-	vector<double> fMassU8Evolution;					//-- A voir
+	double fFlux;
+	vector<double> fMassU5Evolution;
+	vector<double> fMassU8Evolution;
 };
+
+#endif

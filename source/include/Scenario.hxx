@@ -1,3 +1,6 @@
+#ifndef _Scenario_
+#define _Scenario_
+
 #include<vector>
 #include<string>
 
@@ -47,9 +50,11 @@ public :
 	
 	void BuildStatusVector(); // Build the time vector with facilities status event
 	void Evolution(int t);  // Evolution
-	void ReactorEvolution();           // Reactor Evolution
-	void EnrichmentPlantEvolution();  // EnrichmentPlant Evolution
-	void StockEvolution();           // Stock Evolution
+	void ReactorEvolution(int t);           // Reactor Evolution
+	void ReactorStarting(int t); // Start of Reactor
+	void ReactorDrainFuel(int t);
+	void ReactorLoadFuel(int t);
+	void EPFuelEnrichment(int t);  // EnrichmentPlant Evolution
 	
 private :
 
@@ -64,3 +69,5 @@ private :
 	vector<Reactor*> fReactor; // Vecteur Reactor
 	vector<EnrichmentPlant*> fEnrichmentPlant; // Vecteur EnrichmentPlant
 };
+
+#endif

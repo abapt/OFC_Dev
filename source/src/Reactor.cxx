@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include<math.h>
+
 using namespace std;
 
 ////////////////////////////////////////////////////////////////
@@ -15,6 +16,7 @@ Reactor::Reactor() {
   fMassHN = 100;
   fBurnUp = 35;
   fLifeTime = 50;
+  fCrossSection = 46.933e-24;
   (*this).SetName("Reactor");
 }
 
@@ -30,7 +32,7 @@ Reactor::Reactor(double LifeTime,
   fMassHN = MassHN;
   fBurnUp = BurnUp;
   fLifeTime = LifeTime;
-  
+  fCrossSection = 46.933e-24;
   fCycleTime = (fBurnUp * 1e9 / fPower) * (fMassHN * 24);
 }
 
@@ -73,29 +75,42 @@ void Reactor::Evolution(int t) {
   */
   
 //
-  DeltaT = t - (t - 1);
+  int DeltaT = t - (t-1);
   
-  int RelativeTime = t - NumberCycle * fCycleTime;
-  fFlux = 2.28774e+14 +
-          3.81756e+13 * RelativeTime -
-          8.50596e+11 * RelativeTime * RelativeTime;
-  fMassU5Evolution[t] = fMassU5Evolution[t - 1] * exp(-s * f * DeltaT)
-  fMassU8Evolution[t] = fMassU8Evolution[t - 1] * exp(-s * f * DeltaT)
-  
-  
-  for(int i = 1; i <= fCycleTime; ++i) { fFlux.push_back(0); }
-  
-  for(int j = 1; j <= fCycleTime; ++j) {
-    fMassU5Evolution[0] = EnrichmentPlant->GiveReactorUenr();
-    fFlux[j] = 2.28774e+14 + 3.81756e+13 * j - 8.50596e+11 * j * j;
-    fMassU5Evolution[j] = fMassHN * exp(-fFlux[j] * fCrossSection * (j * 365 * 24 * 60 * 60));;
-    fMassU8Evolution[j] = fMassHN - fMassU5Evolution[j];
+  int RelativeTime = (t-StartingTime)%fCycleTime;
+  if (RelativeTime == 1) {fFlux = 2.66099004e+14;}
+  if (RelativeTime == 2) {fFlux = 3.01722816e+14;}
+  if (RelativeTime == 0) {fFlux = 3.35645436e+14;}
+
+  fMassU5Evolution[t] = fMassU5Evolution[t-1]* 
+                        exp(-fCrossSection*fFlux*DeltaT*365.25*24*60*60);
+  fMassU8Evolution[t] = fMassHN - fMassU5Evolution[t];
   }
-  
-  /*if ((t-StartingTime)%LifeTime == 0 && t != StartingTime)
-  {
-    // Créer un vecteur lié à U5Waste de Stock
-    U5Stock[t] += fMassU5Waste[t];
-    U8Stock[t] += fMassU8Waste[t];
-  }*/
+
+void Reactor::Start(int t){
+  double RendementEnrichment = fEnrichmentPlant->GetRendement();
+
+  fMassU5Evolution[t] = fMassHN;
+  fMassU8Evolution[t] = fMassHN/RendementEnrichment;
+}
+
+void Reactor::Drain(int t){
+  vector<double> fMassU5AppStock = fStock->GetMassU5App();
+  vector<double> fMassU8AppStock = fStock->GetMassU8App();
+
+  fMassU5AppStock[t] += fMassU5Evolution[t];
+  fMassU8AppStock[t] += fMassU8Evolution[t];
+  fMassU5Evolution[t] = 0;
+  fMassU8Evolution[t] = 0;
+}
+
+void Reactor::Load(int t){
+  vector<double> fMassU5EnrEP = fEnrichmentPlant->GetMassU5Enr();
+  vector<double> fMassU8EnrEP = fEnrichmentPlant->GetMassU8Enr();
+
+  fMassU5Evolution[t] = fMassU5EnrEP[t];
+  fMassU8Evolution[t] = fMassU8EnrEP[t];
+
+  fMassU5EnrEP[t] = 0;
+  fMassU8EnrEP[t] = 0;
 }

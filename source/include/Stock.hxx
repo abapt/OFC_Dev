@@ -1,9 +1,13 @@
+#ifndef _Stock_
+#define _Stock_
+
 #include<vector>
 #include <string>
 
 using namespace std;
 
 class EnrichmentPlant;
+class Reactor;
 class Scenario;
 
 class Stock {
@@ -13,10 +17,9 @@ public :
         double fMineU5UContent); //Constructeur
   ~Stock(); //Destructeur
   
-  void SetName(string Name) {
+  void SetName(std::string Name) {
     fName = Name;
   }
-  void PrelevementEPUnat(int t);
   
   vector<double> GetMassU5Waste() {
     return fMassU5Waste;
@@ -52,3 +55,5 @@ private :
   vector<double> fMassU5Waste;
   vector<double> fMassU8Waste;
 };
+
+#endif

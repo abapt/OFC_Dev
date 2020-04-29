@@ -6,6 +6,8 @@
 #include<vector>
 #include<string>
 
+using namespace std;
+
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -36,23 +38,36 @@ void Scenario::AddEnrichmentPlant(EnrichmentPlant* enrichmentplant) {
 	fEnrichmentPlant.push_back(enrichmentplant);
 }
 // -----------------------------------------------------------
-void Scenario::ReactorEvolution() {
-	for(int i = 0; i < (int)fReactor.size(); ++i) {
-		fReactor[i]->Evolution(fStartingTime);
+void Scenario::ReactorEvolution(int t) {
+	for(int i = 0; i < (int)fReactor.size(); i++) {
+		fReactor[i]->Evolution(t);
 	}
 }
 // -----------------------------------------------------------
-/*void Scenario::EnrichmentPlantEvolution(){
-	for (int i=0; i<(int)fEnrichmentPlant.size(); ++i)
-	{
-		fEnrichmentPlant[i]->GiveReactorUenr();
-		fEnrichmentPlant[i]->PushUapp();
+void Scenario::ReactorStarting(int t) {
+	for(int i = 0; i < (int)fReactor.size(); i++) {
+		fReactor[i]->Start(t);
 	}
-}*/
+}
 // -----------------------------------------------------------
-void Scenario::StockEvolution() {
-	for(int i = 0; i < (int)fStock.size(); ++i) {
-		fStock[i]->PrelevementEPUnat(fScenarioTime);
+void Scenario::EPFuelEnrichment(int t){
+	for (int i=0; i<(int)fEnrichmentPlant.size(); i++)
+	{
+		fEnrichmentPlant[i]->FuelNatLoad(t);
+		fEnrichmentPlant[i]->FuelConversion(t);
+		fEnrichmentPlant[i]->PushUApp(t);
+	}
+}
+// -----------------------------------------------------------
+void Scenario::ReactorDrainFuel(int t) {
+	for(int i = 0; i < (int)fReactor.size(); i++) {
+		fReactor[i]->Drain(t);
+}
+}
+// -----------------------------------------------------------
+void Scenario::ReactorLoadFuel(int t) {
+	for(int i = 0; i < (int)fReactor.size(); i++) {
+		fReactor[i]->Load(t);
 	}
 }
 
@@ -61,31 +76,31 @@ void Scenario::Evolution(int t) {
 	BuildStatusVector();
 	
 // ----------  Status Loop ----------  //
-	for(t = 0; t < fScenarioTime; ++t) {
+	for(t = 0; t < fScenarioTime; t++) {
 	
 		if(fStatus[t] == 0) {
 			ReactorEvolution(t); // Evolution under neutron flux
 		}
 
 		if(fStatus[t] == 1) {
-			ReactorStarting();
+			ReactorStarting(t);
 		}
 		
 		if(fStatus[t] == 2) {
 			ReactorEvolution(t); // Evolution under neutron flux
-			ReactorDrainFuel(); // Push spent uox in stock
-			FuelEnrichment();   // Take Feed and Push Uapp and Keep Uenr
-			ReactorLoadFuel();  // Take Uenr from EP
+			ReactorDrainFuel(t); // Push spent uox in stock
+			EPFuelEnrichment(t);   // Take Feed and Push Uapp and Keep Uenr
+			ReactorLoadFuel(t);  // Take Uenr from EP
 		}
 		
 		if(fStatus[t] == 3) {
-			FuelEnrichment();   // Take Feed and Push Uapp and Keep Uenr
-			ReactorLoadFuel();  // Take Uenr from EP
+			EPFuelEnrichment(t);   // Take Feed and Push Uapp and Keep Uenr
+			ReactorLoadFuel(t);  // Take Uenr from EP
 		}
 		
 		if(fStatus[t] == 4) {
 			ReactorEvolution(t); // Evolution under neutron flux
-			ReactorDrainFuel(); // Push spent uox in stock
+			ReactorDrainFuel(t); // Push spent uox in stock
 		}
 	}
 }
@@ -101,24 +116,24 @@ void Scenario::BuildStatusVector() {
 	for(int t = 0; t < fScenarioTime; t++) { fStatus.push_back(0); }
 	
 	for(int r = 0; r < fReactor.size(); r++) {
-		int R_StartingTime = fReactor[i]->GetStartingTime();
-		int R_ShutdownTime = (fReactor[i]->GetStartingTime()) +
-		                     (fReactor[i]->GetLifeTime());
-		int R_CycleTime = fReactor[i]->GetCycleTime();
+		int R_StartingTime = fReactor[r]->GetStartingTime();
+		int R_ShutdownTime = (fReactor[r]->GetStartingTime()) +
+		                     (fReactor[r]->GetLifeTime());
+		int R_CycleTime = fReactor[r]->GetCycleTime();
 		
 		for(int t = R_StartingTime; t <= R_ShutdownTime; t++) {
 // ----------  Reactor Loop ----------  //
 			if(t == R_StartingTime) {
-				fStatus[i] += 1;
+				fStatus[r] += 1;
 			}
 			
 			if(t == R_ShutdownTime) {
-				fStatus[i] += 4;
+				fStatus[r] += 4;
 			}
 			
 			if(((t - R_StartingTime) % R_CycleTime) == 0)  {
-				fStatus[i] += 2;
-			} //A voir
+				fStatus[r] += 2;
+			} 
 		}
 	}
 }
