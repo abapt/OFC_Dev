@@ -88,7 +88,7 @@ void Reactor::Evolution(int t) {
   }
 
 void Reactor::Start(int t){
-  CalculateU5Enrichment(fBurnUp)  
+  CalculateU5Enrichment(fBurnUp);  
 
   // Fill Reactor
   fMassU5Evolution[t] = fMassHN * fEnrichissement;
@@ -98,16 +98,18 @@ void Reactor::Start(int t){
 }
 
 void Reactor::Drain(int t){
-  vector<double> fMassU5AppStock = fStock->GetMassU5App();
-  vector<double> fMassU8AppStock = fStock->GetMassU8App();
+  vector<double> fMassU5WasteStock = fStock->GetMassU5Waste();
+  vector<double> fMassU8WasteStock = fStock->GetMassU8Waste();
 
-  fMassU5AppStock[t] += fMassU5Evolution[t];
-  fMassU8AppStock[t] += fMassU8Evolution[t];
+  fMassU5WasteStock[t] += fMassU5Evolution[t];
+  fMassU8WasteStock[t] += fMassU8Evolution[t];
   fMassU5Evolution[t] = 0;
   fMassU8Evolution[t] = 0;
 }
 
 void Reactor::Load(int t){
+  CalculateU5Enrichment(fBurnUp);  
+
   vector<double> fMassU5EnrEP = fEnrichmentPlant->GetMassU5Enr();
   vector<double> fMassU8EnrEP = fEnrichmentPlant->GetMassU8Enr();
 

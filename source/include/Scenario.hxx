@@ -43,7 +43,11 @@ public :
 	vector<EnrichmentPlant*> GetEnrichmentPlant() {
 		return fEnrichmentPlant;
 	}
-	
+	vector<int> GetStatus() {
+		return fStatus;
+	}
+
+
 	void AddReactor(Reactor* reactor);
 	void AddStock(Stock* stock);
 	void AddEnrichmentPlant(EnrichmentPlant* enrichmentplant);

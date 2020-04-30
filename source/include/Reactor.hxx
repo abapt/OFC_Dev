@@ -57,6 +57,10 @@ public :
 		fMassHN = Mass;
 	}  // défini le masse de noyaux fissiles au début du cycle
 	
+	vector<EnrichmentPlant*> GetEnrichmentPlant() {
+		return fEP;
+	}
+
 	void Evolution(int t);
 	void Start(int t);
 	void Drain(int t);
@@ -79,8 +83,9 @@ private :
 	double fEnrichissement;
 	double fCrossSection;
 
-	Stock* fStock;
+	vector<EnrichmentPlant*> fEP; // Vecteur EnrichmentPlant pour Scenario
 	EnrichmentPlant* fEnrichmentPlant;
+	Stock* fStock;
 	
 	//Evolution data
 	double fFlux;
