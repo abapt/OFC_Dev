@@ -59,18 +59,18 @@ void Scenario::Evolution(int t) {
         // Enrichment of the other half of UNat
         // Push Uapp in Stock Uapp
         // Remove Uenr from EP
-        fReactor[r]->GetEnrichmentPlant()[t]->FuelNatLoad(t);
-        fReactor[r]->GetEnrichmentPlant()[t]->FuelConversion(t);
-        fReactor[r]->GetEnrichmentPlant()[t]->PushUApp(t);
+        fReactor[r]->GetEnrichmentPlant()->FuelNatLoad(t);
+        fReactor[r]->GetEnrichmentPlant()->FuelConversion(t);
+        fReactor[r]->GetEnrichmentPlant()->PushUApp(t);
         fReactor[r]->Load(t);
       }
       
       if(fStatus[t] == 2) {
         fReactor[r]->Evolution(t); // Evolution under neutron flux
         fReactor[r]->Drain(t); // Push spent uox in stock
-        fReactor[r]->GetEnrichmentPlant()[t]->FuelNatLoad(t);
-        fReactor[r]->GetEnrichmentPlant()[t]->FuelConversion(t);
-        fReactor[r]->GetEnrichmentPlant()[t]->PushUApp(t);
+        fReactor[r]->GetEnrichmentPlant()->FuelNatLoad(t);
+        fReactor[r]->GetEnrichmentPlant()->FuelConversion(t);
+        fReactor[r]->GetEnrichmentPlant()->PushUApp(t);
         fReactor[r]->Load(t);
       }
       

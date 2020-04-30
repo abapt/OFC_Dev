@@ -46,7 +46,13 @@ public :
 	int GetCycleTime() {
 		return fCycleTime;
 	}
+  EnrichmentPlant* GetEnrichmentPlant() {
+    return fEnrichmentPlant;
+  }
 	
+  void SetEnrichmentPlant(EnrichmentPlant* EP) {
+    fEnrichmentPlant = EP;
+  }
 	void SetStartingTime(int StartingTime) {
 		fStartingTime = StartingTime;
 	}
@@ -57,10 +63,6 @@ public :
 		fMassHN = Mass;
 	}  // défini le masse de noyaux fissiles au début du cycle
 	
-	vector<EnrichmentPlant*> GetEnrichmentPlant() {
-		return fEP;
-	}
-
 	void Evolution(int t);
 	void Start(int t);
 	void Drain(int t);
@@ -83,7 +85,6 @@ private :
 	double fEnrichissement;
 	double fCrossSection;
 
-	vector<EnrichmentPlant*> fEP; // Vecteur EnrichmentPlant pour Scenario
 	EnrichmentPlant* fEnrichmentPlant;
 	Stock* fStock;
 	

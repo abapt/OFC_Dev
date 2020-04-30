@@ -28,7 +28,7 @@ EnrichmentPlant::~EnrichmentPlant() {}
 ////////////////////////////////////////////////////////////////
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-double EnrichmentPlant::CalculateNeededMasses() {
+void EnrichmentPlant::CalculateNeededMasses() {
 	fNeededUenrMassesByReactorLoading = fReactor->GetMassHN();
 	fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading/ 
 										fRendement;

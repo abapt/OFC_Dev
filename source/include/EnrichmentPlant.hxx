@@ -51,7 +51,7 @@ public :
     	return fMassU8Enr;
   	}
 
-	double CalculateNeededMasses();
+	void CalculateNeededMasses();
 
 	void FuelNatLoad(int t); 
 	void FuelConversion(int t);
