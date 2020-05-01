@@ -33,6 +33,8 @@ public :
 	void SetEndingTime(int EndingTime) {
 		fEndingTime = EndingTime;
 	}
+
+
 	
 	vector<Reactor*> GetReactor() {
 		return fReactor;
@@ -60,14 +62,18 @@ public :
 	void ReactorLoadFuel(int t);
 	void EPFuelEnrichment(int t);  // EnrichmentPlant Evolution
 	
+	void WriteOutput(string fOutputFile);
+
+
 private :
 
 	vector<int> fStatus; // Events status
+	string fOutputFile;
 	
 	int fStartingTime; // début de simulation (an)
 	int fEndingTime; // fin de simulation (an)
 	int fScenarioTime; // Durée de la simulation (an)
-	
+
 	
 	vector<Stock*> fStock; // Vecteur Stock
 	vector<Reactor*> fReactor; // Vecteur Reactor

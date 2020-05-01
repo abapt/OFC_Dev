@@ -41,18 +41,26 @@ public :
 		return fEnrichissement;
 	}
 	double GetCrossSection() const {
-		return fCrossSection;
+		return fCrossSection;  // recup cross section
 	}
 	int GetCycleTime() {
-		return fCycleTime;
+		return fCycleTime; // recup cycle Time
+	} 
+
+	vector<double> GetMassU5Evo(){
+		return fMassU5Evolution;
+	} 
+	vector<double> GetMassU8Evo(){
+		return fMassU8Evolution;
 	}
-  EnrichmentPlant* GetEnrichmentPlant() {
-    return fEnrichmentPlant;
-  }
+
+ 	EnrichmentPlant* GetEnrichmentPlant() {
+    	return fEnrichmentPlant; // point to EP
+  	}
 	
-  void SetEnrichmentPlant(EnrichmentPlant* EP) {
-    fEnrichmentPlant = EP;
-  }
+  	void SetEnrichmentPlant(EnrichmentPlant* EP) {
+    	fEnrichmentPlant = EP;
+ 	}
 	void SetStartingTime(int StartingTime) {
 		fStartingTime = StartingTime;
 	}

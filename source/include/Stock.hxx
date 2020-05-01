@@ -21,25 +21,25 @@ public :
     fName = Name;
   }
   
-  vector<double> GetMassU5Waste() {
-    return fMassU5Waste;
+  vector<double> GetMassU5Waste() { 
+    return fMassU5Waste; // Waste U5 stock (after reactor)
   }
   vector<double> GetMassU8Waste() {
-    return fMassU8Waste;
+    return fMassU8Waste; // Waste U8 stock (after reactor)
   }
   vector<double> GetMassU5App() {
-    return fMassU5App;
+    return fMassU5App; // App U5 stock (after EP)
   }
   vector<double> GetMassU8App() {
-    return fMassU8App;
+    return fMassU8App; // App U8 stock (after EP)
   }
   vector<double> GetMassU5Nat() {
-    return fMassU5Nat;
+    return fMassU5Nat; // U5 stock (mine)
   }
   vector<double> GetMassU8Nat() {
-    return fMassU8Nat;
+    return fMassU8Nat; // U8 stock (mine)
   }
-  
+
 private :
 
   string fName;

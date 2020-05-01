@@ -53,11 +53,11 @@ void Reactor::Evolution(int t) {
   int StartingTime = GetStartingTime();
   int LifeTime = GetLifeTime();
   
-  if(t < StartingTime) {
+  if(t < StartingTime) { // Reactor not started
     return;
   }
   
-  if(t > StartingTime + LifeTime) {
+  if(t > StartingTime + LifeTime) { // reactor stopped
     return;
   }
   
@@ -75,9 +75,9 @@ void Reactor::Evolution(int t) {
   */
   
 //
-  int DeltaT = t - (t-1);
+  int DeltaT = t - (t-1); //def time interval between calculation
   
-  int RelativeTime = (t-StartingTime)%fCycleTime;
+  int RelativeTime = (t-StartingTime)%fCycleTime; //define flux 
   if (RelativeTime == 1) {fFlux = 2.66099004e+14;}
   if (RelativeTime == 2) {fFlux = 3.01722816e+14;}
   if (RelativeTime == 0) {fFlux = 3.35645436e+14;}
@@ -98,9 +98,11 @@ void Reactor::Start(int t){
 }
 
 void Reactor::Drain(int t){
+  //Access to stocks
   vector<double> fMassU5WasteStock = fStock->GetMassU5Waste();
   vector<double> fMassU8WasteStock = fStock->GetMassU8Waste();
 
+  // Modify stock masses
   fMassU5WasteStock[t] += fMassU5Evolution[t];
   fMassU8WasteStock[t] += fMassU8Evolution[t];
   fMassU5Evolution[t] = 0;
@@ -108,14 +110,18 @@ void Reactor::Drain(int t){
 }
 
 void Reactor::Load(int t){
+  // Calculate needed U5
   CalculateU5Enrichment(fBurnUp);  
 
+  // Access to EP stocks
   vector<double> fMassU5EnrEP = fEnrichmentPlant->GetMassU5Enr();
   vector<double> fMassU8EnrEP = fEnrichmentPlant->GetMassU8Enr();
 
+  // Modify Reactor stocks
   fMassU5Evolution[t] = fMassU5EnrEP[t];
   fMassU8Evolution[t] = fMassU8EnrEP[t];
 
+  // Reset EP stocks
   fMassU5EnrEP[t] = 0;
   fMassU8EnrEP[t] = 0;
 }

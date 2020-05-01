@@ -4,6 +4,8 @@
 #include"EnrichmentPlant.hxx"
 
 #include<vector>
+#include <iostream>
+#include <fstream>
 #include<string>
 
 using namespace std;
@@ -81,6 +83,7 @@ void Scenario::Evolution(int t) {
     }
   }
 }
+
 //-----------------------------------------------------------
 void Scenario::BuildStatusVector() {
   // Status of the events
@@ -117,5 +120,46 @@ void Scenario::BuildStatusVector() {
   }
 }
 
+//-----------------------------------------------------------
+void Scenario::WriteOutput(string OutputFileName) {
+	ofstream fOutputFileName;
 
+	for(int t=0; t<fScenarioTime; t++) {
 
+		fOutputFileName << t << " ";
+
+		for (int r=0; r< fReactor.size(); r++) {
+    		vector<double> reactor_U5 = fReactor[r]->GetMassU5Evo();
+    		vector<double> reactor_U8 = fReactor[r]->GetMassU8Evo();
+
+    		fOutputFileName << reactor_U5[t] << " " << reactor_U8[t] << " ";
+  		}
+
+  		for (int e=0; e<fEnrichmentPlant.size(); e++) {
+    		vector<double> EP_U5App = fEnrichmentPlant[e]->GetMassU5App();
+    		vector<double> EP_U8App = fEnrichmentPlant[e]->GetMassU8App();
+
+    		vector<double> EP_U5Nat = fEnrichmentPlant[e]->GetMassU5Nat();
+    		vector<double> EP_U8Nat = fEnrichmentPlant[e]->GetMassU8Nat();
+
+    		vector<double> EP_U5Enr = fEnrichmentPlant[e]->GetMassU5Enr();
+    		vector<double> EP_U8Enr = fEnrichmentPlant[e]->GetMassU8Enr();
+
+    		fOutputFileName << EP_U5App[t] << " " << EP_U8App[t] << " " << EP_U5Nat[t] << " " << EP_U8Nat[t] << " " << EP_U5Enr[t] << " " << EP_U8Enr[t] << " ";
+    	}
+
+  		for (int s=0; s<fStock.size(); s++) {
+    		vector<double> stock_U5App = fStock[s]->GetMassU5App();
+    		vector<double> stock_U8App = fStock[s]->GetMassU8App();
+
+			vector<double> stock_U5Waste = fStock[s]->GetMassU5Waste();
+    		vector<double> stock_U8Waste = fStock[s]->GetMassU8Waste();
+
+			vector<double> stock_U5Nat = fStock[s]->GetMassU5Nat();
+    		vector<double> stock_U8Nat= fStock[s]->GetMassU8Nat();
+
+    		fOutputFileName << stock_U5App[t] << " " << stock_U8App[t] << " " << stock_U5Waste[t] << " " << stock_U8Waste[t] << " " << stock_U5Nat[t] << " " << stock_U8Nat[t];
+  		}
+		fOutputFileName << endl;
+	}
+}
