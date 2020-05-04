@@ -163,4 +163,5 @@ void Scenario::WriteOutput(string Out) {
   		}
 		output << endl;
 	}
+
 }
