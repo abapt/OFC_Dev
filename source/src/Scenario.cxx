@@ -118,7 +118,6 @@ void Scenario::BuildStatusVector() {
       }
     }
   }
-  WriteOutput("out.dat");
 }
 
 //-----------------------------------------------------------
@@ -130,8 +129,8 @@ void Scenario::WriteOutput(string OutputFileName) {
 		fOutputFileName << t << " ";
 
 		for (int r=0; r< fReactor.size(); r++) {
-    		double reactor_U5 = fReactor[r]->GetMassU5React(t);
-    		double reactor_U8 = fReactor[r]->GetMassU8React(t);
+    		double reactor_U5 = fReactor[r]->GetMassU5React(r);
+    		double reactor_U8 = fReactor[r]->GetMassU8React(r);
 
     		fOutputFileName << reactor_U5 << " " << reactor_U8 << " ";
   		}

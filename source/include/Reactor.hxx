@@ -19,28 +19,28 @@ public :
 	        double fLoadFactor); //Constructeur
 	~Reactor(); //Destructeur
 	
-	int GetStartingTime() const {
+	int GetStartingTime(){
 		return fStartingTime;
 	}
-	int GetLifeTime() const {
+	int GetLifeTime(){
 		return fLifeTime;
 	}
-	double GetMassHN() const {
+	double GetMassHN() {
 		return fMassHN;
 	}  // Masse de noyaux lourds au début du cycle
-	double GetBurnUp() const {
+	double GetBurnUp() {
 		return fBurnUp;
 	}  // BurnUp à la fin du cycle
-	double GetLoadFactor() const {
+	double GetLoadFactor() {
 		return fLoadFactor;
 	}  // facteur de "remplissage" du réacteur
-	double GetPower() const {
+	double GetPower() {
 		return fPower;
 	}  // temps de cycle du réacteur
-	double GetEnrichissement() const {
+	double GetEnrichissement() {
 		return fEnrichissement;
 	}
-	double GetCrossSection() const {
+	double GetCrossSection() {
 		return fCrossSection;  // recup cross section
 	}
 	int GetCycleTime() {

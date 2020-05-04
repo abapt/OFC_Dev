@@ -15,13 +15,13 @@ public :
 	Scenario(int startingTime);
 	~Scenario();
 	
-	int GetStartingTime() const {
+	int GetStartingTime() {
 		return fStartingTime;
 	}
-	int GetScenarioTime() const {
+	int GetScenarioTime() {
 		return fScenarioTime;
 	}
-	int GetEndingTime() const {
+	int GetEndingTime() {
 		return fEndingTime;
 	}
 	void SetStartingTime(int StartingTime) {
