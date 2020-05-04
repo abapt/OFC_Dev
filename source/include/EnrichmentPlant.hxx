@@ -51,6 +51,25 @@ public :
     	return fMassU8Enr; // Mass U8 in Enr created
   	}
 
+  	double GetMassU5EnrEP(int t){
+		return fMassU5Enr[t];
+	}
+	double GetMassU8EnrEP(int t){
+		return fMassU8Enr[t];
+	}
+	double GetMassU5AppEP(int t){
+		return fMassU5App[t];
+	}
+	double GetMassU8AppEP(int t){
+		return fMassU8App[t];
+	}
+	double GetMassU5NatEP(int t){
+		return fMassU5Nat[t];
+	}
+	double GetMassU8NatEP(int t){
+		return fMassU8Nat[t];
+	}
+
 	void CalculateNeededMasses();
 
 	void FuelNatLoad(int t); 

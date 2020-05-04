@@ -54,6 +54,13 @@ public :
 		return fMassU8Evolution;
 	}
 
+	double GetMassU5React(int t){
+		return fMassU5Evolution[t];
+	}
+	double GetMassU8React(int t){
+		return fMassU8Evolution[t];
+	}
+
  	EnrichmentPlant* GetEnrichmentPlant() {
     	return fEnrichmentPlant; // point to EP
   	}

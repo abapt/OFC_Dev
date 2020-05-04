@@ -129,36 +129,36 @@ void Scenario::WriteOutput(string OutputFileName) {
 		fOutputFileName << t << " ";
 
 		for (int r=0; r< fReactor.size(); r++) {
-    		vector<double> reactor_U5 = fReactor[r]->GetMassU5Evo();
-    		vector<double> reactor_U8 = fReactor[r]->GetMassU8Evo();
+    		double reactor_U5 = fReactor[r]->GetMassU5React(t);
+    		double reactor_U8 = fReactor[r]->GetMassU8React(t);
 
-    		fOutputFileName << reactor_U5[t] << " " << reactor_U8[t] << " ";
+    		fOutputFileName << reactor_U5 << " " << reactor_U8 << " ";
   		}
 
   		for (int e=0; e<fEnrichmentPlant.size(); e++) {
-    		vector<double> EP_U5App = fEnrichmentPlant[e]->GetMassU5App();
-    		vector<double> EP_U8App = fEnrichmentPlant[e]->GetMassU8App();
+    		double EP_U5App = fEnrichmentPlant[e]->GetMassU5AppEP(t);
+    		double EP_U8App = fEnrichmentPlant[e]->GetMassU8AppEP(t);
 
-    		vector<double> EP_U5Nat = fEnrichmentPlant[e]->GetMassU5Nat();
-    		vector<double> EP_U8Nat = fEnrichmentPlant[e]->GetMassU8Nat();
+    		double EP_U5Nat = fEnrichmentPlant[e]->GetMassU5NatEP(t);
+    		double EP_U8Nat = fEnrichmentPlant[e]->GetMassU8NatEP(t);
 
-    		vector<double> EP_U5Enr = fEnrichmentPlant[e]->GetMassU5Enr();
-    		vector<double> EP_U8Enr = fEnrichmentPlant[e]->GetMassU8Enr();
+    		double EP_U5Enr = fEnrichmentPlant[e]->GetMassU5EnrEP(t);
+    		double EP_U8Enr = fEnrichmentPlant[e]->GetMassU8EnrEP(t);
 
-    		fOutputFileName << EP_U5App[t] << " " << EP_U8App[t] << " " << EP_U5Nat[t] << " " << EP_U8Nat[t] << " " << EP_U5Enr[t] << " " << EP_U8Enr[t] << " ";
+    		fOutputFileName << EP_U5App << " " << EP_U8App << " " << EP_U5Nat << " " << EP_U8Nat << " " << EP_U5Enr << " " << EP_U8Enr << " ";
     	}
 
   		for (int s=0; s<fStock.size(); s++) {
-    		vector<double> stock_U5App = fStock[s]->GetMassU5App();
-    		vector<double> stock_U8App = fStock[s]->GetMassU8App();
+    		double stock_U5App = fStock[s]->GetMassU5AppStock(t);
+    		double stock_U8App = fStock[s]->GetMassU8AppStock(t);
 
-			vector<double> stock_U5Waste = fStock[s]->GetMassU5Waste();
-    		vector<double> stock_U8Waste = fStock[s]->GetMassU8Waste();
+			double stock_U5Waste = fStock[s]->GetMassU5WasteStock(t);
+    		double stock_U8Waste = fStock[s]->GetMassU8WasteStock(t);
 
-			vector<double> stock_U5Nat = fStock[s]->GetMassU5Nat();
-    		vector<double> stock_U8Nat= fStock[s]->GetMassU8Nat();
+			double stock_U5Nat = fStock[s]->GetMassU5NatStock(t);
+    		double stock_U8Nat= fStock[s]->GetMassU8NatStock(t);
 
-    		fOutputFileName << stock_U5App[t] << " " << stock_U8App[t] << " " << stock_U5Waste[t] << " " << stock_U8Waste[t] << " " << stock_U5Nat[t] << " " << stock_U8Nat[t];
+    		fOutputFileName << stock_U5App << " " << stock_U8App << " " << stock_U5Waste << " " << stock_U8Waste << " " << stock_U5Nat << " " << stock_U8Nat;
   		}
 		fOutputFileName << endl;
 	}

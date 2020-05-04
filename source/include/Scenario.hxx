@@ -33,7 +33,9 @@ public :
 	void SetEndingTime(int EndingTime) {
 		fEndingTime = EndingTime;
 	}
-
+	void SetScenarioOutFile(string Outputfile){
+		fOutputFile = Outputfile;
+	}
 
 	
 	vector<Reactor*> GetReactor() {
