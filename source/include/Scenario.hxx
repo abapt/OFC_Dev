@@ -33,8 +33,8 @@ public :
 	void SetEndingTime(int EndingTime) {
 		fEndingTime = EndingTime;
 	}
-	void SetScenarioOutFile(string Outputfile){
-		fOutputFile = Outputfile;
+	void SetScenarioOutFile(string outName){
+		fOutputFile = outName;
 	}
 
 	
