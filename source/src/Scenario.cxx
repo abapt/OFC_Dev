@@ -118,6 +118,7 @@ void Scenario::BuildStatusVector() {
       }
     }
   }
+  WriteOutput("out.dat");
 }
 
 //-----------------------------------------------------------
