@@ -13,6 +13,7 @@ class Scenario;
 class Stock {
 public :
   	Stock();
+  	Stock(double fMassUApp);
   	Stock(double fMassUNat,
           double fMineU5UContent); //Constructeur
   	~Stock(); //Destructeur
@@ -64,6 +65,11 @@ private :
   string fName;
   double fMassUNat;
   double fMineU5UContent;
+
+  double fMassUApp;
+  double fMassUWaste;
+
+  Scenario* sScenario;
   
   vector<double> fMassU5App;
   vector<double> fMassU8App;

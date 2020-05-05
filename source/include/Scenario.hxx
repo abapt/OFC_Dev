@@ -12,7 +12,7 @@ class EnrichmentPlant;
 
 class Scenario {
 public :
-	Scenario(int startingTime);
+	Scenario(int fScenarioTime);
 	~Scenario();
 	
 	int GetStartingTime() {
@@ -26,9 +26,6 @@ public :
 	}
 	void SetStartingTime(int StartingTime) {
 		fStartingTime = StartingTime;
-	}
-	void SetScenarioTime(int ScenarioTime) {
-		fScenarioTime = ScenarioTime;
 	}
 	void SetEndingTime(int EndingTime) {
 		fEndingTime = EndingTime;
@@ -80,6 +77,10 @@ private :
 	vector<Stock*> fStock; // Vecteur Stock
 	vector<Reactor*> fReactor; // Vecteur Reactor
 	vector<EnrichmentPlant*> fEnrichmentPlant; // Vecteur EnrichmentPlant
+
+	EnrichmentPlant* fEnrichmentPlantPoint; // Pointeur Ep
+	Stock* fStockPoint; // Pointeur Stock
+	Reactor* fReactorPoint; // Pointeur Reactor
 };
 
 #endif

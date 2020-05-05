@@ -8,11 +8,14 @@ using namespace std;
 
 class Stock;
 class EnrichmentPlant;
+class Scenario;
 
 class Reactor {
 public :
 	Reactor(); //Constructeur simple
 	Reactor(double fLifeTime,
+			double fStartingTime,
+			int fScenarioTime,
 	        double fPower,
 	        double fMassHN,
 	        double fBurnUp,
@@ -61,6 +64,7 @@ public :
 		return fMassU8Evolution[t];
 	}
 
+
  	EnrichmentPlant* GetEnrichmentPlant() {
     	return fEnrichmentPlant; // point to EP
   	}
@@ -68,9 +72,7 @@ public :
   	void SetEnrichmentPlant(EnrichmentPlant* EP) {
     	fEnrichmentPlant = EP;
  	}
-	void SetStartingTime(int StartingTime) {
-		fStartingTime = StartingTime;
-	}
+
 	void SetName(string Name) {
 		fName = Name;
 	}
@@ -92,6 +94,7 @@ private :
 	int fStartingTime;
 	int fCycleTime;
 	int fLifeTime;
+	int fScenarioTime;
 	
 	double fMassHN;
 	double fPower;
@@ -102,6 +105,7 @@ private :
 
 	EnrichmentPlant* fEnrichmentPlant;
 	Stock* fStock;
+	Scenario* fScenario;
 	
 	//Evolution data
 	double fFlux;

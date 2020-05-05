@@ -88,6 +88,7 @@ private :
 
  	Stock* fStock; // point to stock
 	Reactor* fReactor; // point to reactor
+	Scenario* fScenario;
 	
 	string fName;
 	double fU5ContentInUapp;

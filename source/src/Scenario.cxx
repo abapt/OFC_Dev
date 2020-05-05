@@ -13,8 +13,8 @@ using namespace std;
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-Scenario::Scenario(int startingTime) {
-  fStartingTime = startingTime;
+Scenario::Scenario(int ScenarioTime) {
+  fScenarioTime = ScenarioTime*8766;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -42,11 +42,12 @@ void Scenario::AddEnrichmentPlant(EnrichmentPlant* enrichmentplant) {
 //-----------------------------------------------------------
 void Scenario::Evolution(int t) {
   BuildStatusVector();
-  
+      cout << "Taille scenario " << fScenarioTime << endl;
+      cout << "test " << fStatus[124993] << endl;
 // ----------  Status Loop ----------  //
   for(t = 0; t < fScenarioTime; t++) {
     for(int r = 0; r < fReactor.size(); r++) {
-      if(fStatus[t] == 0) {
+      /*if(fStatus[t] == 0) {
         fReactor[r]->Evolution(t); // Evolution under neutron flux
       }
       
@@ -79,7 +80,7 @@ void Scenario::Evolution(int t) {
       if(fStatus[t] == 4) {
         fReactor[r]->Evolution(t); // Evolution under neutron flux
         fReactor[r]->Drain(t); // Push spent uox in stock
-      }
+      }*/
     }
   }
 }
@@ -99,22 +100,23 @@ void Scenario::BuildStatusVector() {
     int R_ShutdownTime = (fReactor[r]->GetStartingTime()) +
                          (fReactor[r]->GetLifeTime());
     int R_CycleTime = fReactor[r]->GetCycleTime();
-    
+    cout << "start reactor "<< R_StartingTime << endl;
+    cout << "end reactor "<< R_ShutdownTime << endl;
+    cout << "cycle reactor "<< R_CycleTime << endl;
     for(int t = R_StartingTime; t <= R_ShutdownTime; t++) {
 // ----------  Reactor Loop ----------  //
       if(t == R_StartingTime) {
-        fStatus[r] = 1;
+        fStatus[t] = 1;
       }
       
       if(t == R_ShutdownTime) {
-        fStatus[r] = 4;
+        fStatus[t] = 4;
       }
       
-      if(((t - R_StartingTime) % R_CycleTime) == 0 &&
-          t != R_StartingTime &&
-          t != R_ShutdownTime)  {
-          
-        fStatus[r] = 2;
+      if((t>R_StartingTime) && 
+         (t<R_ShutdownTime) &&
+         ((t - R_StartingTime) % (R_CycleTime) == 0))  {
+        fStatus[t] = 2;
       }
     }
   }
@@ -127,9 +129,9 @@ void Scenario::WriteOutput(string Out) {
 
 	for(int t=0; t<fScenarioTime; t++) {
 
-		output << t << " ";
+		output << t << " " ;
 
-		for (int r=0; r< fReactor.size(); r++) {
+		/*for (int r=0; r< fReactor.size(); r++) {
     		double reactor_U5 = fReactor[r]->GetMassU5React(t);
     		double reactor_U8 = fReactor[r]->GetMassU8React(t);
 
@@ -160,7 +162,7 @@ void Scenario::WriteOutput(string Out) {
     		double stock_U8Nat= fStock[s]->GetMassU8NatStock(t);
 
     		output << stock_U5App << " " << stock_U8App << " " << stock_U5Waste << " " << stock_U8Waste << " " << stock_U5Nat << " " << stock_U8Nat;
-  		}
+  		}*/
 		output << endl;
 	}
 
