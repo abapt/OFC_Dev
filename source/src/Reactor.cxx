@@ -41,12 +41,12 @@ Reactor::Reactor(double LifeTime,
   fCycleTime = (fBurnUp * 1e9 / fPower) * (fMassHN * 24);
 
   fScenarioTime = ScenarioTime;
-  cout <<"taille Scenar " << fScenarioTime << endl; 
+
   for(int t=0; t<fScenarioTime; t++) {
     fMassU5Evolution.push_back(0);
     fMassU8Evolution.push_back(0);
   }
-  fMassU5Evolution[0]=0;
+  fMassU5Evolution[0]=0; // a enlever
   fMassU8Evolution[0]=0;
 }
 
@@ -68,9 +68,10 @@ void Reactor::CalculateU5Enrichment(double BurnUp) {
 void Reactor::Evolution(int t) {
   int StartingTime = GetStartingTime();
   int LifeTime = GetLifeTime();
-  cout << "taille Evo " << fMassU5Evolution.size() << endl;
+
   if(t < StartingTime) { // Reactor not started
     return;
+    cout << "Evolution" << endl;
   }
   
   if(t > (StartingTime + LifeTime)) { // reactor stopped
@@ -100,10 +101,10 @@ void Reactor::Evolution(int t) {
   fFlux = 2.4807e+14 
         + 5.246979e+9*hourInCycle 
         - 2.1964855e+4*hourInCycle*hourInCycle;
-/*
+
   fMassU5Evolution[t] = fMassU5Evolution[t-1]* 
                         exp(-fCrossSection*fFlux*DeltaT*60*60);
-  fMassU8Evolution[t] = fMassHN - fMassU5Evolution[t];*/
+  fMassU8Evolution[t] = fMassHN - fMassU5Evolution[t];
   }
 
 void Reactor::Drain(int t){

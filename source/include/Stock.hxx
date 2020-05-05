@@ -12,10 +12,12 @@ class Scenario;
 
 class Stock {
 public :
-  	Stock();
-  	Stock(double fMassUApp);
+  	Stock(int fScenarioTime);
+  	Stock(double fMassUApp,
+  		  int fScenarioTime);
   	Stock(double fMassUNat,
-          double fMineU5UContent); //Constructeur
+          double fMineU5UContent,
+          int fScenarioTime); //Constructeur
   	~Stock(); //Destructeur
   
   	void SetName(std::string Name) {
@@ -65,7 +67,7 @@ private :
   string fName;
   double fMassUNat;
   double fMineU5UContent;
-
+  int fScenarioTime;
   double fMassUApp;
   double fMassUWaste;
 

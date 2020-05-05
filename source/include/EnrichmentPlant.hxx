@@ -12,7 +12,8 @@ class Stock;
 
 class EnrichmentPlant {
 public :
-	EnrichmentPlant(double WasteU5Content); //Constructeur simple
+	EnrichmentPlant(double WasteU5Content,
+					int fScenarioTime); //Constructeur simple
 	~EnrichmentPlant(); //Destructeur
 	
 	void SetName(string Name) {
@@ -95,6 +96,7 @@ private :
 	double fU5ContentInUenr;
 	double fU5ContentInUnat;
 	double fRendement;
+	int fScenarioTime;
 	double fNeededUenrMassesByReactorLoading;
 	double fNeededUappMassesByReactorLoading;
 	double fNeededUnatMassesByReactorLoading;
