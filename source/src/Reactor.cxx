@@ -108,29 +108,26 @@ void Reactor::Evolution(int t) {
 
 void Reactor::Drain(int t){
   //Access to stocks
-  vector<double> fMassU5WasteStock = fStock->GetMassU5Waste();
-  vector<double> fMassU8WasteStock = fStock->GetMassU8Waste();
+  vector<double> fMassU5SpentStock = fStock->GetMassU5Spent();
+  vector<double> fMassU8SpentStock = fStock->GetMassU8Spent();
 
   // Modify stock masses
-  fMassU5WasteStock[t] += fMassU5Evolution[t];
-  fMassU8WasteStock[t] += fMassU8Evolution[t];
+  fMassU5SpentStock[t] += fMassU5Evolution[t];
+  fMassU8SpentStock[t] += fMassU8Evolution[t];
   fMassU5Evolution[t] = 0;
   fMassU8Evolution[t] = 0;
 }
 
-void Reactor::Load(int t){
-  // Calculate needed U5
-  CalculateU5Enrichment(fBurnUp);  
-
+void Reactor::Load(int t){ 
   // Access to EP stocks
-  vector<double> fMassU5EnrEP = fEnrichmentPlant->GetMassU5Enr();
-  vector<double> fMassU8EnrEP = fEnrichmentPlant->GetMassU8Enr();
+  vector<double> fMassU5ProductEP = fEnrichmentPlant->GetMassU5Product();
+  vector<double> fMassU8ProductEP = fEnrichmentPlant->GetMassU8Product();
 
   // Modify Reactor stocks
-  fMassU5Evolution[t] = fMassU5EnrEP[t-1];
-  fMassU8Evolution[t] = fMassU8EnrEP[t-1];
+  fMassU5Evolution[t] = fMassU5ProductEP[t-1];
+  fMassU8Evolution[t] = fMassU8ProductEP[t-1];
 
   // Reset EP stocks
-  fMassU5EnrEP[t] = 0;
-  fMassU8EnrEP[t] = 0;
+  fMassU5ProductEP[t] = 0;
+  fMassU8ProductEP[t] = 0;
 }

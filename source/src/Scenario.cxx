@@ -134,30 +134,30 @@ void Scenario::WriteOutput(string Out) {
   		}
 
   		for (int e=0; e<fEnrichmentPlant.size(); e++) {
-    		//double EP_U5App = fEnrichmentPlant[e]->GetMassU5AppEP(t);
-    		//double EP_U8App = fEnrichmentPlant[e]->GetMassU8AppEP(t);
+    		//double EP_U5Waste = fEnrichmentPlant[e]->GetMassU5WasteEP(t);
+    		//double EP_U8Waste = fEnrichmentPlant[e]->GetMassU8WasteEP(t);
 
-    		double EP_U5Nat = fEnrichmentPlant[e]->GetMassU5NatEP(t);
-    		double EP_U8Nat = fEnrichmentPlant[e]->GetMassU8NatEP(t);
+    		double EP_U5Feed = fEnrichmentPlant[e]->GetMassU5FeedEP(t);
+    		double EP_U8Feed = fEnrichmentPlant[e]->GetMassU8FeedEP(t);
 
-    		double EP_U5Enr = fEnrichmentPlant[e]->GetMassU5EnrEP(t);
-    		double EP_U8Enr = fEnrichmentPlant[e]->GetMassU8EnrEP(t);
-        output << EP_U5Nat << " " << EP_U8Nat << " " << EP_U5Enr << " " << EP_U8Enr << " ";
-    		//output << EP_U5App << " " << EP_U8App << " " << EP_U5Nat << " " << EP_U8Nat << " " << EP_U5Enr << " " << EP_U8Enr << " ";
+    		double EP_U5Product = fEnrichmentPlant[e]->GetMassU5ProductEP(t);
+    		double EP_U8Product = fEnrichmentPlant[e]->GetMassU8ProductEP(t);
+        output << EP_U5Feed << " " << EP_U8Feed << " " << EP_U5Product << " " << EP_U8Product << " ";
+    		//output << EP_U5Waste << " " << EP_U8Waste << " " << EP_U5Feed << " " << EP_U8Feed << " " << EP_U5Product << " " << EP_U8Product << " ";
     	}
 
   		for (int s=0; s<fStock.size(); s++) {
-    		//double stock_U5App = fStock[s]->GetMassU5AppStock(t);
-    		//double stock_U8App = fStock[s]->GetMassU8AppStock(t);
-
-		    //double stock_U5Waste = fStock[s]->GetMassU5WasteStock(t);
+    		//double stock_U5Waste = fStock[s]->GetMassU5WasteStock(t);
     		//double stock_U8Waste = fStock[s]->GetMassU8WasteStock(t);
 
-		    double stock_U5Nat = fStock[s]->GetMassU5NatStock(t);
-    		double stock_U8Nat= fStock[s]->GetMassU8NatStock(t);
+		    //double stock_U5Spent = fStock[s]->GetMassU5SpentStock(t);
+    		//double stock_U8Spent = fStock[s]->GetMassU8SpentStock(t);
+
+		    double stock_U5Feed = fStock[s]->GetMassU5FeedStock(t);
+    		double stock_U8Feed= fStock[s]->GetMassU8FeedStock(t);
             
-        output << stock_U5Nat << " " << stock_U8Nat << endl;
-    		//output << stock_U5App << " " << stock_U8App << " " << stock_U5Waste << " " << stock_U8Waste << " " << stock_U5Nat << " " << stock_U8Nat;
+        output << stock_U5Feed << " " << stock_U8Feed << endl;
+    		//output << stock_U5Waste << " " << stock_U8Waste << " " << stock_U5Spent << " " << stock_U8Spent << " " << stock_U5Feed << " " << stock_U8Feed;
   		}
 		output << endl;
 	}

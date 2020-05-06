@@ -14,6 +14,18 @@ Stock::Stock(int ScenarioTime) {
   	fScenarioTime = ScenarioTime;
 
   	for(int t=0; t<fScenarioTime; t++) {
+    	fMassU5Spent.push_back(0);
+    	fMassU8Spent.push_back(0);
+  	}
+
+	SetName("Stock.");
+}
+
+Stock::Stock(double MassUWaste,
+			 int ScenarioTime) {
+  	fScenarioTime = ScenarioTime;
+; 
+  	for(int t=0; t<fScenarioTime; t++) {
     	fMassU5Waste.push_back(0);
     	fMassU8Waste.push_back(0);
   	}
@@ -21,29 +33,17 @@ Stock::Stock(int ScenarioTime) {
 	SetName("Stock.");
 }
 
-Stock::Stock(double MassUApp,
-			 int ScenarioTime) {
-  	fScenarioTime = ScenarioTime;
-; 
-  	for(int t=0; t<fScenarioTime; t++) {
-    	fMassU5App.push_back(0);
-    	fMassU8App.push_back(0);
-  	}
-
-	SetName("Stock.");
-}
-
-Stock::Stock(double MassUNat,
+Stock::Stock(double MassUFeed,
              double MineU5UContent,
              int ScenarioTime) {
-  	fMassUNat = MassUNat;
+  	fMassUFeed = MassUFeed;
   	fMineU5UContent = MineU5UContent;
 
   	fScenarioTime = ScenarioTime;
 
   	for(int t=0; t<fScenarioTime; t++) {
-    	fMassU5Nat.push_back(0);
-    	fMassU8Nat.push_back(0);
+    	fMassU5Feed.push_back(0);
+    	fMassU8Feed.push_back(0);
   	}
 
   	SetName("Stock.");
