@@ -71,6 +71,10 @@ public :
   	void SetEnrichmentPlant(EnrichmentPlant* EP) {
     	fEnrichmentPlant = EP;
  	}
+
+ 	Stock* GetStock(){
+ 		return fStock;
+ 	}
  	void SetStock(Stock* stock){
  		fStock = stock;
  	}

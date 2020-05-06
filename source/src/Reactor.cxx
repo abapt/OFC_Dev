@@ -103,7 +103,7 @@ void Reactor::Evolution(int t) {
 
   fMassU5Evolution[t] = fMassU5Evolution[t-1]* 
                         exp(-fCrossSection*fFlux*DeltaT*60*60);
-  fMassU8Evolution[t] = fMassHN - fMassU5Evolution[t];
+  fMassU8Evolution[t] = fMassHN*1000 - fMassU5Evolution[t];
   }
 
 void Reactor::Drain(int t){
@@ -127,8 +127,8 @@ void Reactor::Load(int t){
   vector<double> fMassU8EnrEP = fEnrichmentPlant->GetMassU8Enr();
 
   // Modify Reactor stocks
-  fMassU5Evolution[t] = fMassU5EnrEP[t];
-  fMassU8Evolution[t] = fMassU8EnrEP[t];
+  fMassU5Evolution[t] = fMassU5EnrEP[t-1];
+  fMassU8Evolution[t] = fMassU8EnrEP[t-1];
 
   // Reset EP stocks
   fMassU5EnrEP[t] = 0;

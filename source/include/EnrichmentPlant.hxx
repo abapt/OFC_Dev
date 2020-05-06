@@ -104,6 +104,8 @@ private :
 	Reactor* fReactor; // point to reactor
 	Scenario* fScenario;
 	
+	vector<Stock*> epStock;
+
 	string fName;
 	double fU5ContentInUapp;
 	double fU5ContentInUenr;
