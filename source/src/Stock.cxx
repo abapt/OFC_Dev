@@ -10,6 +10,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------
 Stock::Stock(int ScenarioTime) {
 
   for(int t = 0; t < ScenarioTime; t++) {
@@ -19,19 +20,7 @@ Stock::Stock(int ScenarioTime) {
   
   SetName("Stock.");
 }
-
-Stock::Stock(double Mass,
-             int ScenarioTime) {
-             
-  SetName("Stock.");
-  
-  for(int t = 0; t < ScenarioTime; t++) {
-    fMassU5.push_back(0);
-    fMassU8.push_back(0);
-  }
-  
-}
-
+// ----------------------------------------------------------
 Stock::Stock(double Mass,
              double U5Content,
              int ScenarioTime) {
@@ -45,7 +34,6 @@ Stock::Stock(double Mass,
   
   fMassU5[0] = Mass * U5Content;
   fMassU8[0] = Mass * (1 - U5Content);
-  
 }
 
 ////////////////////////////////////////////////////////////////

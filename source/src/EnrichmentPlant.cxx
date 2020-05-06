@@ -35,37 +35,15 @@ EnrichmentPlant::~EnrichmentPlant() {}
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-// ----------------------------------------------------------
-void EnrichmentPlant::RemoveMassU5(int time, double mass){
+void EnrichmentPlant::SetStock(Stock* feedstock,
+                               Stock* productstock,
+                               Stock* wastestock) {
+                               
+// Mettre un if qui oblige les stocks à etre définis avant....
 
-  if(fMassU5[time] - mass < 0){
-    cout<<"ERROR in EnrichmentPlant::RemoveMassU5(t,m)"<<endl;
-    cout<<"You try to remove the mass "<<mass<<endl;
-    cout<<"in the stock "<<GetName()<<endl;
-    exit(1);
-  }
-
-  fMassU5[time] = fMassU5[time] - mass;
-}
-// ----------------------------------------------------------
-void EnrichmentPlant::RemoveMassU8(int time, double mass){
-
-  if(fMassU8[time] - mass < 0){
-    cout<<"ERROR in EnrichmentPlant::RemoveMassU8(t,m)"<<endl;
-    cout<<"You try to remove the mass "<<mass<<endl;
-    cout<<"in the stock "<<GetName()<<endl;
-    exit(1);
-  }
-
-  fMassU8[time] = fMassU8[time] - mass;
-}
-// ----------------------------------------------------------
-void EnrichmentPlant::AddMassU5(int time, double mass){
-  fMassU5[time] = fMassU5[time] + mass;
-}
-// ----------------------------------------------------------
-void EnrichmentPlant::AddMassU8(int time, double mass){
-  fMassU8[time] = fMassU8[time] + mass;
+  fFeedStock = feedstock;
+  fProductStock = productstock;
+  fWasteStock = wastestock;
 }
 
 // ----------------------------------------------------------
@@ -126,12 +104,20 @@ void EnrichmentPlant::FuelEnrichmentProcess(int time,
     double MassOfProductInDT = MassOfFeedInDT * Rendement;
     double MassOfWasteInDT = MassOfFeedInDT - MassOfProductInDT;
     
+    // Remove Product mass in the EP
+    fMassU5[t] -= MassOfProductInDT * U5ContentInUProduct;
+    fMassU8[t] -= MassOfProductInDT * (1 - U5ContentInUProduct);
+
     // Remove Waste mass in the EP
     fMassU5[t] -= MassOfWasteInDT * fU5ContentInUWaste;
     fMassU8[t] -= MassOfWasteInDT * (1 - fU5ContentInUWaste);
     
+    // Push Product mass in the Product Stock
+    GetProductStock()->AddMassU5(t, MassOfProductInDT * U5ContentInUProduct);
+    GetProductStock()->AddMassU8(t, MassOfProductInDT * (1 - U5ContentInUProduct));
+
     // Push Waste mass in the Waste Stock
     GetWasteStock()->AddMassU5(t, MassOfWasteInDT * fU5ContentInUWaste);
-    GetWasteStock()->AddMassU8(t, MassOfWasteInDT * (1 - fU5ContentInUWaste)); 
+    GetWasteStock()->AddMassU8(t, MassOfWasteInDT * (1 - fU5ContentInUWaste));
   }
 }
