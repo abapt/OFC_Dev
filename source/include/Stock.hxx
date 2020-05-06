@@ -23,6 +23,9 @@ public :
   	void SetName(std::string Name) {
     	fName = Name;
   	}
+  	string GetName(){
+  		return fName;
+  	}
   
   	vector<double> GetMassU5Waste() { 
     	return fMassU5Waste; // Waste U5 stock (after reactor)
@@ -61,6 +64,7 @@ public :
 	double GetMassU8NatStock(int t){
 		return fMassU8Nat[t];
 	}
+
 
 private :
 

@@ -13,13 +13,15 @@ using namespace std;
 ////////////////////////////////////////////////////////////////
 EnrichmentPlant::EnrichmentPlant(double WasteU5Content,
 								 int ScenarioTime) {
-  	fU5ContentInUapp = 0.003;
+  	fU5ContentInUapp = WasteU5Content;
   	fU5ContentInUnat = 0.0072;
-  	fU5ContentInUenr = WasteU5Content;
+  	fU5ContentInUenr = 0.034;	
+  	//string nom = fReactor->GetName();
+  	//cout << nom << endl;
   	SetName("EnrichmentPlant.");
 
   	fRendement = (fU5ContentInUnat - fU5ContentInUapp) / 
-  			   (fU5ContentInUenr - fU5ContentInUapp);
+  			     (fU5ContentInUenr - fU5ContentInUapp);
 
 	fScenarioTime = ScenarioTime;
 
@@ -33,14 +35,7 @@ EnrichmentPlant::EnrichmentPlant(double WasteU5Content,
     	fMassU5Nat.push_back(0);
     	fMassU8Nat.push_back(0);
   	}
-  	cout << "EP U5 " << fMassU5Nat.size() << endl; 
-    fMassU5App[0]=0;
-    fMassU8App[0]=0;
-    fMassU5Enr[0]=0;
-    fMassU8Enr[0]=0;
-    fMassU5Nat[0]=0;
-    fMassU8Nat[0]=0;
-
+  	CalculateNeededMasses();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -52,7 +47,7 @@ EnrichmentPlant::~EnrichmentPlant() {}
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 void EnrichmentPlant::CalculateNeededMasses() {
-	fNeededUenrMassesByReactorLoading = fReactor->GetMassHN();
+	fNeededUenrMassesByReactorLoading = 100000;
 	fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading/ 
 										fRendement;
 	fNeededUappMassesByReactorLoading = fNeededUnatMassesByReactorLoading-
@@ -60,43 +55,46 @@ void EnrichmentPlant::CalculateNeededMasses() {
 }
 
 void EnrichmentPlant::FuelNatLoad(int t) {
-	cout << "EP " << fMassU5Nat.size() << endl;
-	//vector<double> fMassU5NatMine = fStock->GetMassU5Nat();
-	//vector<double> fMassU8NatMine = fStock->GetMassU8Nat();
+	string nom = fStock->GetName();
+	cout << nom << " " << fU5ContentInUapp << " " << fU5ContentInUnat <<" " <<fU5ContentInUenr<< endl;
 
-	//cout << "size Stock" << fMassU8NatMine.size() << endl;
+	cout << fNeededUnatMassesByReactorLoading<<endl;
+	vector<double> fMassU5NatMine = fStock->GetMassU5Nat();
+	vector<double> fMassU8NatMine = fStock->GetMassU8Nat();
 
-	fMassU5Nat[t] = fNeededUnatMassesByReactorLoading*fU5ContentInUnat;
-	fMassU8Nat[t] = fNeededUnatMassesByReactorLoading/(1-fU5ContentInUnat);
-	//fStock->fMassU5Nat[t-2*8766] -= fMassU5Nat[t-2*8766];
-	//Stock::fMassU8Nat[t-2*8766] -= fMassU8Nat[t-2*8766];
-	//fMassU5Enr[t-2*8766] = 0;
-	//fMassU8Enr[t-2*8766] = 0;
+	fMassU5Nat[t-17532] = fNeededUnatMassesByReactorLoading*fU5ContentInUnat;
+	fMassU8Nat[t-17532] = fNeededUnatMassesByReactorLoading*(1-fU5ContentInUnat);
+	
+	fMassU5NatMine[t-17532] -= fMassU5Nat[t-17532];
+	fMassU8NatMine[t-17532] -= fMassU8Nat[t-17532];
+	
+	fMassU5Enr[t-17532] = 0;
+	fMassU8Enr[t-17532] = 0;
 }
 
 void EnrichmentPlant::FuelConversion(int t) {
-	fMassU5Nat[t] = 0;
-	fMassU8Nat[t] = 0;
-	fMassU5Enr[t] = fNeededUenrMassesByReactorLoading*
+	double U5Load = fNeededUenrMassesByReactorLoading*
 					fU5ContentInUenr;
-	fMassU8Enr[t] = fNeededUenrMassesByReactorLoading*
+	double U8Load = fNeededUenrMassesByReactorLoading*
 					(1-fU5ContentInUenr);
-// -----------------------------------------
-	fMassU5Nat[t-8766] = fMassU5Nat[t-2*8766] / 2;
-	fMassU8Nat[t-8766] = fMassU8Nat[t-2*8766] / 2;
-	fMassU5Enr[t-8766] = fMassU5Enr[t] / 2;
-	fMassU8Enr[t-8766] = fMassU8Enr[t] / 2;
-// -----------------------------------------
-	fMassU5App[t] = fNeededUappMassesByReactorLoading*
-					fU5ContentInUapp;
-	fMassU8App[t] = fNeededUappMassesByReactorLoading*
-					(1-fU5ContentInUapp);
 
-	fMassU5App[t-8766] = fMassU5App[t] / 2;
-	fMassU8App[t-8766] = fMassU8App[t] / 2;
+	for (int i=1; i<17532; i++) {
+		fMassU5Nat[t-17532+i]=fMassU5Nat[t-17532+i-1]-(fMassU5Nat[t-17532]/17532);
+		fMassU8Nat[t-17532+i]=fMassU8Nat[t-17532+i-1]-(fMassU8Nat[t-17532]/17532);
+	
+		fMassU5Enr[t-17532+i]=fMassU5Enr[t-17532+i-1]+ (U5Load/17532);
+		fMassU8Enr[t-17532+i]=fMassU8Enr[t-17532+i-1]+ (U8Load/17532);
+	}
+	for (int j=0; j<=17532; j++) {
+		fMassU5App[t-17532+j] = fMassU5Nat[t-j]-fMassU5Enr[t-17532+j];
+		fMassU8App[t-17532+j] = fMassU8Nat[t-j]-fMassU8Enr[t-17532+j];
+	}
 
-	fMassU5App[t-2*8766] = 0;
-	fMassU8App[t-2*8766] = 0;
+	fMassU5Nat[t]=0;
+	fMassU8Nat[t]=0;
+
+	fMassU5Enr[t] = U5Load;
+	fMassU8Enr[t] = U8Load;
 }
 
 void EnrichmentPlant::PushUApp(int t) {

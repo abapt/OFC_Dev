@@ -71,6 +71,19 @@ public :
 		return fMassU8Nat[t];
 	}
 
+	Stock* GetStock() {
+    	return fStock; // point to Stock
+  	}
+  	void SetStock(Stock* Stock) {
+    	fStock = Stock;
+ 	}
+ 	Reactor* GetReactor(){
+ 		return fReactor;
+ 	}
+ 	void SetReactor(Reactor* reactor){
+ 		fReactor = reactor;
+ 	}
+
 	void CalculateNeededMasses();
 
 	void FuelNatLoad(int t); 

@@ -46,8 +46,7 @@ Reactor::Reactor(double LifeTime,
     fMassU5Evolution.push_back(0);
     fMassU8Evolution.push_back(0);
   }
-  fMassU5Evolution[0]=0; // a enlever
-  fMassU8Evolution[0]=0;
+  CalculateU5Enrichment(fBurnUp);
 }
 
 ////////////////////////////////////////////////////////////////

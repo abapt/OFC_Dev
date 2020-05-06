@@ -68,14 +68,21 @@ public :
  	EnrichmentPlant* GetEnrichmentPlant() {
     	return fEnrichmentPlant; // point to EP
   	}
-	
   	void SetEnrichmentPlant(EnrichmentPlant* EP) {
     	fEnrichmentPlant = EP;
  	}
+ 	void SetStock(Stock* stock){
+ 		fStock = stock;
+ 	}
+
 
 	void SetName(string Name) {
 		fName = Name;
 	}
+	string GetName(){
+		return fName;
+	}
+
 	void SetMassHN(double Mass) {
 		fMassHN = Mass;
 	}  // défini le masse de noyaux fissiles au début du cycle
@@ -86,7 +93,7 @@ public :
 	void Load(int t);
 	void Push(int t);
 	
-	void CalculateU5Enrichment(double fBurnUp);
+	void CalculateU5Enrichment(double BurnUp);
 	
 private :
 
