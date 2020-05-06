@@ -11,26 +11,19 @@ using namespace std;
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-EnrichmentPlant::EnrichmentPlant(double WasteU5Content,
-								 int ScenarioTime) {
-  	fU5ContentInUapp = WasteU5Content;
-  	fU5ContentInUnat = 0.0072;
-
-  	SetName("EnrichmentPlant.");
-
-
-	fScenarioTime = ScenarioTime;
-
-  	for(int t=0; t<fScenarioTime; t++) {
-    	fMassU5Waste.push_back(0);
-    	fMassU8Waste.push_back(0);
-
-    	fMassU5Product.push_back(0);
-    	fMassU8Product.push_back(0);
-
-    	fMassU5Feed.push_back(0);
-    	fMassU8Feed.push_back(0);
-  	}
+EnrichmentPlant::EnrichmentPlant(double U5ContentInUWaste,
+                                 int ScenarioTime) {
+                                 
+  fEnrichmentTime = 17532;
+  fU5ContentInUWaste = U5ContentInUWaste;
+  
+  SetName("EnrichmentPlant.");
+  
+  for(int t = 0; t < ScenarioTime; t++) {
+    fMassU5.push_back(0);
+    fMassU8.push_back(0);
+    
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -41,85 +34,90 @@ EnrichmentPlant::~EnrichmentPlant() {}
 ////////////////////////////////////////////////////////////////
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-void EnrichmentPlant::AddFeedStock(FeedStock* stock) {
-  fFeedStock.push_back(stock);
+
+void EnrichmentPlant::SetStock(Stock* feedstock,
+                               Stock* productstock,
+                               Stock* wastestock) {
+                               
+// Mettre un if qui oblige les stocks à etre définis avant....
+
+  fFeedStock = feedstock;
+  fProductStock = productstock;
+  fWasteStock = wastestock;
 }
 
-void EnrichmentPlant::AddWasteStock(WasteStock* stock) {
-  fWasteStock.push_back(stock);
+// ----------------------------------------------------------
+void EnrichmentPlant::FuelEnrichment(int time,
+                                     double ReactorMass,
+                                     double U5ContentInUProduct) {
+                                     
+  TakeFeedMassForFuel(time - fEnrichmentTime, ReactorMass, U5ContentInUProduct);
+  FuelEnrichmentProcess(time - fEnrichmentTime, ReactorMass, U5ContentInUProduct);
+  
+  
 }
-
-
-void EnrichmentPlant::CalculateNeededMasses() {
-fRendement = (fU5ContentInUFeed - fU5ContentInUWaste) / 
-  			     (fU5ContentInUProduct - fU5ContentInUWaste);
-
-	fNeededUenrMassesByReactorLoading = 100000;
-	fNeededUnatMassesByReactorLoading = fNeededUenrMassesByReactorLoading/ 
-										fRendement;
-	fNeededUappMassesByReactorLoading = fNeededUnatMassesByReactorLoading-
-                                        fNeededUenrMassesByReactorLoading;
+// ----------------------------------------------------------
+void EnrichmentPlant::TakeFeedMassForFuel(int time,
+                                          double ReactorMass,
+                                          double U5ContentInUProduct) {
+                                          
+  double MassU5InFeedStock = fFeedStock->GetMassU5(time);
+  double MassU8InFeedStock = fFeedStock->GetMassU8(time);
+  
+  double U5ContentInUFeed = MassU5InFeedStock /
+                            (MassU5InFeedStock + MassU8InFeedStock);
+  double Rendement = (U5ContentInUFeed    - fU5ContentInUWaste) /
+                     (U5ContentInUProduct - fU5ContentInUWaste);
+                     
+  double URequiredMassFromFeed = ReactorMass / Rendement;
+  
+  // Add Feed mass in the EP
+  fMassU5[time] += URequiredMassFromFeed * U5ContentInUFeed;
+  fMassU8[time] += URequiredMassFromFeed * (1 - U5ContentInUFeed);
+  
+  // Remove Feed mass in the feed stock
+  GetFeedStock()->RemoveMassU5(time, URequiredMassFromFeed * U5ContentInUFeed);
+  GetFeedStock()->RemoveMassU8(time, URequiredMassFromFeed * (1 - U5ContentInUFeed));
+  
 }
+// ----------------------------------------------------------
+void EnrichmentPlant::FuelEnrichmentProcess(int time,
+                                            double ReactorMass,
+                                            double U5ContentInUProduct) {
+                                            
+  int tStart = time + 1;
+  int tStop  = time + fEnrichmentTime;
+  
+  double MassU5InFeedStock = fFeedStock->GetMassU5(time);
+  double MassU8InFeedStock = fFeedStock->GetMassU8(time);
+  
+  double U5ContentInUFeed = MassU5InFeedStock /
+                            (MassU5InFeedStock + MassU8InFeedStock);
+  double Rendement = (U5ContentInUFeed    - fU5ContentInUWaste) /
+                     (U5ContentInUProduct - fU5ContentInUWaste);
+                     
+  double URequiredMassFromFeed = ReactorMass / Rendement;
+  
+  for(int t = tStart; t <= tStop; t++) {
+  
+    double MassOfFeedInDT = URequiredMassFromFeed / fEnrichmentTime;
+    double MassOfProductInDT = MassOfFeedInDT * Rendement;
+    double MassOfWasteInDT = MassOfFeedInDT - MassOfProductInDT;
+    
+    // Remove Product mass in the EP
+    fMassU5[t] -= MassOfProductInDT * U5ContentInUProduct;
+    fMassU8[t] -= MassOfProductInDT * (1 - U5ContentInUProduct);
 
-void EnrichmentPlant::FuelNatLoad(int t) {
-		CalculateNeededMasses();
+    // Remove Waste mass in the EP
+    fMassU5[t] -= MassOfWasteInDT * fU5ContentInUWaste;
+    fMassU8[t] -= MassOfWasteInDT * (1 - fU5ContentInUWaste);
+    
+    // Push Product mass in the Product Stock
+    GetProductStock()->AddMassU5(t, MassOfProductInDT * U5ContentInUProduct);
+    GetProductStock()->AddMassU8(t, MassOfProductInDT * (1 - U5ContentInUProduct));
 
-		vector<double> fMassU5FeedMine = fFeedStock->GetMassU5Feed();
-		vector<double> fMassU8FeedMine = fFeedStock->GetMassU8Feed();
-
-		fMassU5Feed[t-17532] = fNeededUnatMassesByReactorLoading
-							 *fU5ContentInUnat;
-		fMassU8Feed[t-17532] = fNeededUnatMassesByReactorLoading
-							 *(1-fU5ContentInUnat);
-	
-		fMassU5FeedMine[t-17532] -= fMassU5Feed[t-17532];
-		fMassU8FeedMine[t-17532] -= fMassU8Feed[t-17532];
-	
-		fMassU5Product[t-17532] = 0;
-		fMassU8Product[t-17532] = 0;
-	
+    // Push Waste mass in the Waste Stock
+    GetWasteStock()->AddMassU5(t, MassOfWasteInDT * fU5ContentInUWaste);
+    GetWasteStock()->AddMassU8(t, MassOfWasteInDT * (1 - fU5ContentInUWaste));
+  }
 }
-
-void EnrichmentPlant::FuelConversion(int t) {
-	double U5ByLoad = fNeededUenrMassesByReactorLoading*
-					fU5ContentInUenr;
-	double U8ByLoad = fNeededUenrMassesByReactorLoading*
-					(1-fU5ContentInUenr);
-
-	for (int i=1; i<17531; i++) {
-		fMassU5Feed[t-17532+i]=fMassU5Feed[t-17532+i-1]
-							-(fMassU5Feed[t-17532]/17531);
-		fMassU8Feed[t-17532+i]=fMassU8Feed[t-17532+i-1]
-							-(fMassU8Feed[t-17532]/17531);
-	
-		fMassU5Product[t-17532+i]=fMassU5Product[t-17532+i-1]
-							+(U5ByLoad/17531);
-		fMassU8Product[t-17532+i]=fMassU8Product[t-17532+i-1]
-							+(U8ByLoad/17531);
-	}
-	for (int j=0; j<=17532; j++) {
-		fMassU5Waste[t-17532+j]=fMassU5Feed[t-j]
-							 -fMassU5Product[t-17532+j];
-		fMassU8Waste[t-17532+j]=fMassU8Feed[t-j]
-							 -fMassU8Product[t-17532+j];
-	}
-	fMassU5Feed[t-1]=0;
-	fMassU8Feed[t-1]=0;
-
-	fMassU5Product[t-1] = U5ByLoad;
-	fMassU8Product[t-1] = U8ByLoad;
-}
-
-void EnrichmentPlant::PushUWaste(int t) {
-
-		vector<double> fMassU5WasteStock = fWasteStock->GetMassU5Waste();
-		vector<double> fMassU8WasteStock = fWasteStock->GetMassU8Waste();
-
-		fMassU5WasteStock[t] += fMassU5Waste[t];
-		fMassU8WasteStock[t] += fMassU8Waste[t];
-
-		fMassU5Waste[t] = 0;
-		fMassU8Waste[t] = 0;
-	
-}
-                                                                                                         

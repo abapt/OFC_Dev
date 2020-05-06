@@ -6,123 +6,60 @@
 
 using namespace std;
 
-class Reactor;
-class Scenario;
 class Stock;
 
 class EnrichmentPlant {
 public :
 	EnrichmentPlant(double WasteU5Content,
-					int fScenarioTime); //Constructeur simple
+	                int fScenarioTime); //Constructeur simple
 	~EnrichmentPlant(); //Destructeur
 	
 	void SetName(string Name) {
 		fName = Name;
 	}
+	string GetName() {
+		return fName;
+	}
 	
-	double GetUnatEachLoad(){
-		return fNeededUnatMassesByReactorLoading; // Mass UNat by Load
-	}
-	double GetUappEachLoad() {
-		return fNeededUappMassesByReactorLoading; // Mass UApp by Load
-	}
-	double GetUenrEachLoad(){
-		return fNeededUenrMassesByReactorLoading; // Mass UEnr by Load
-	}
-	double GetRendement() {
-		return fRendement; // Rendement
-	}
+	void SetStock(Stock* feedstock, Stock* productstock, Stock* wastestock);
 
-	vector<double> GetMassU5Waste() {
-    	return fMassU5Waste; // Mass U5 in App created
-  	}
- 	vector<double> GetMassU8Waste() {
-    	return fMassU8Waste; // Mass U8 in App created
-  	}	
-  	vector<double> GetMassU5Feed() {
-    	return fMassU5Feed; // Mass U5 in Nat taken from mine
-  	}
-  	vector<double> GetMassU8Feed() {
-    	return fMassU8Feed; // Mass U8 in Nat taken from mine
-  	}
-  	vector<double> GetMassU5Product() {
-    	return fMassU5Product; // Mass U5 in Enr created
-  	}
-  	vector<double> GetMassU8Product() {
-    	return fMassU8Product; // Mass U8 in Enr created
-  	}
-
-  	double GetMassU5ProductEP(int t){
-		return fMassU5Product[t];
-	}
-	double GetMassU8ProductEP(int t){
-		return fMassU8Product[t];
-	}
-	double GetMassU5WasteEP(int t){
-		return fMassU5Waste[t];
-	}
-	double GetMassU8WasteEP(int t){
-		return fMassU8Waste[t];
-	}
-	double GetMassU5FeedEP(int t){
-		return fMassU5Feed[t];
-	}
-	double GetMassU8FeedEP(int t){
-		return fMassU8Feed[t];
-	}
-
-	Stock* GetStock() {
-    	return fStock; // point to Stock
-  	}
-  	void SetStock(Stock* Stock) {
-    	fStock = Stock;
- 	}
- 	Reactor* GetReactor(){
- 		return fReactor;
- 	}
- 	void SetReactor(Reactor* reactor){
- 		fReactor = reactor;
- 	}
-
-	void AddFeedStock(FeedStock* feedstock);
-	void AddWasteStock(WasteStock* wastestock);
-
-	void CalculateNeededMasses();
-
-	void FuelNatLoad(int t); 
-	void FuelConversion(int t);
-	void PushUApp(int t);
+	void SetFeedStock(Stock* feedstock) {fFeedStock = feedstock;}
+	void SetProductStock(Stock* productstock) {fProductStock = productstock;}
+	void SetWasteStock(Stock* wastestock) {fWasteStock = wastestock;}
+	
+	Stock* GetFeedStock() {return fFeedStock;}
+	Stock* GetProductStock() {return fProductStock;}
+	Stock* GetWasteStock() {return fWasteStock;}
+	
+	// Main function for enrichment
+	// Step 1 : TakeFeedMassForFuel
+	// Step 2 : progressive Enrichment process and Push waste
+	void FuelEnrichment(int time, double ReactorMass, double U5ContentInUProduct);
+	// Take the required mass in Feed stock
+	void TakeFeedMassForFuel(int time, double ReactorMass, double U5ContentInUProduct);
+	// Take the required mass in Feed stock
+	void FuelEnrichmentProcess(int time, double ReactorMass, double U5ContentInUProduct);
+	
+	void RemoveMassU5(int time, double mass);
+	void AddMassU5(int time, double mass);
+	
+	void RemoveMassU8(int time, double mass);
+	void AddMassU8(int time, double mass);
+	
 	
 private :
-	vector<double> fMassU5Product; // Amount of U5 
-	vector<double> fMassU8Product;
-
-	vector<double> fMassU5Waste;
- 	vector<double> fMassU8Waste;
-  
- 	vector<double> fMassU5Feed;
- 	vector<double> fMassU8Feed;
-
- 	Stock* fStock; // point to stock
-	Reactor* fReactor; // point to reactor
-	Scenario* fScenario;
-
-
-	vector<FeedStock*> fFeedStock;
-	vector<WasteStock*> fWasteStock;
-	FeedStock* fFeedStockPoint;
-	WasteStock* fWasteStockPoint;
-	
-
 	string fName;
+	
+	Stock* fFeedStock; // Pointer to connected Stock for Feed
+	Stock* fProductStock; // Pointer to connected Stock for Product
+	Stock* fWasteStock; // Pointer to connected Stock for Feed
+	
+	vector<double> fMassU5; // Amount of U5
+	vector<double> fMassU8; // Amount of U8
+	
+	int fEnrichmentTime;
+	
 	double fU5ContentInUWaste;
-	double fU5ContentInUProduct;
-	double fU5ContentInUFeed;
-	double fRendement;
-	int fScenarioTime;
-	double fNeededUenrMassesByReactorLoading;
-	double fNeededUappMassesByReactorLoading;
-	double fNeededUnatMassesByReactorLoading;
 };
 
 #endif

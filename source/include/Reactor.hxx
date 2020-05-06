@@ -8,7 +8,6 @@ using namespace std;
 
 class Stock;
 class EnrichmentPlant;
-class Scenario;
 
 class Reactor {
 public :
@@ -40,8 +39,8 @@ public :
 	double GetPower() {
 		return fPower;
 	}  // temps de cycle du réacteur
-	double GetEnrichissement() {
-		return fEnrichissement;
+	double GetEnrichment() {
+		return fEnrichment;
 	}
 	double GetCrossSection() {
 		return fCrossSection;  // recup cross section
@@ -111,12 +110,11 @@ private :
 	double fPower;
 	double fLoadFactor;
 	double fBurnUp;
-	double fEnrichissement;
+	double fEnrichment;
 	double fCrossSection;
 
 	EnrichmentPlant* fEnrichmentPlant;
 	Stock* fStock;
-	Scenario* fScenario;
 	
 	//Evolution data
 	double fFlux;

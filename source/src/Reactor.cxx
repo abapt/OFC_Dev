@@ -1,7 +1,6 @@
 #include "Reactor.hxx"
 #include "Stock.hxx"
 #include "EnrichmentPlant.hxx"
-#include "Scenario.hxx"
 
 #include <iostream>
 #include<math.h>
@@ -16,8 +15,8 @@ Reactor::Reactor() {
   fPower = 3e9 * fLoadFactor;
   fMassHN = 100;
   fBurnUp = 35;
-  fLifeTime = 50*365.25*24;
-  fStartingTime =10*365.25*24;
+  fLifeTime = 50 * 365.25 * 24;
+  fStartingTime = 10 * 365.25 * 24;
   fCrossSection = 46.933e-24;
   (*this).SetName("Reactor");
 }
@@ -35,17 +34,18 @@ Reactor::Reactor(double LifeTime,
   fPower = power * fLoadFactor;
   fMassHN = MassHN;
   fBurnUp = BurnUp;
-  fStartingTime = CreationTime*365.25*24;
-  fLifeTime = LifeTime*365.25*24;
+  fStartingTime = CreationTime * 365.25 * 24;
+  fLifeTime = LifeTime * 365.25 * 24;
   fCrossSection = 46.933e-24;
   fCycleTime = (fBurnUp * 1e9 / fPower) * (fMassHN * 24);
-
+  
   fScenarioTime = ScenarioTime;
-
-  for(int t=0; t<fScenarioTime; t++) {
+  
+  for(int t = 0; t < fScenarioTime; t++) {
     fMassU5Evolution.push_back(0);
     fMassU8Evolution.push_back(0);
   }
+  
   CalculateU5Enrichment(fBurnUp);
 }
 
@@ -58,16 +58,16 @@ Reactor::~Reactor() {}
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 void Reactor::CalculateU5Enrichment(double BurnUp) {
-  fEnrichissement = 0.0135139 + 0.000563569 * BurnUp 
-                  + 1.34642e-06 * BurnUp * BurnUp; 
-                  // fBurnUp en GWj/t
+  fEnrichment = 0.0135139 + 0.000563569 * BurnUp
+                + 1.34642e-06 * BurnUp * BurnUp;
+  // fBurnUp en GWj/t
 }
 
 
 void Reactor::Evolution(int t) {
   int StartingTime = GetStartingTime();
   int LifeTime = GetLifeTime();
-
+  
   if(t < StartingTime) { // Reactor not started
     return;
     cout << "Evolution" << endl;
@@ -90,44 +90,44 @@ void Reactor::Evolution(int t) {
   p2                        = -8.50596e+11   +/-   5.27476e+11
   */
   
-
-  int DeltaT = t - (t-1); //def time interval between calculation
-
-  int numCycle = (t-StartingTime)/fCycleTime;
   
-  int hourInCycle = (t-StartingTime-(numCycle*fCycleTime));
+  int DeltaT = t - (t - 1); //def time interval between calculation
+  
+  int numCycle = (t - StartingTime) / fCycleTime;
+  
+  int hourInCycle = (t - StartingTime - (numCycle * fCycleTime));
+  
+  fFlux = 2.4807e+14
+          + 5.246979e+9 * hourInCycle
+          - 2.1964855e+4 * hourInCycle * hourInCycle;
+          
+  fMassU5Evolution[t] = fMassU5Evolution[t - 1] *
+                        exp(-fCrossSection * fFlux * DeltaT * 60 * 60);
+  fMassU8Evolution[t] = fMassHN * 1000 - fMassU5Evolution[t];
+}
 
-  fFlux = 2.4807e+14 
-        + 5.246979e+9*hourInCycle 
-        - 2.1964855e+4*hourInCycle*hourInCycle;
+void Reactor::Drain(int t) {
 
-  fMassU5Evolution[t] = fMassU5Evolution[t-1]* 
-                        exp(-fCrossSection*fFlux*DeltaT*60*60);
-  fMassU8Evolution[t] = fMassHN*1000 - fMassU5Evolution[t];
-  }
-
-void Reactor::Drain(int t){
-  //Access to stocks
-  vector<double> fMassU5SpentStock = fStock->GetMassU5Spent();
-  vector<double> fMassU8SpentStock = fStock->GetMassU8Spent();
-
-  // Modify stock masses
-  fMassU5SpentStock[t] += fMassU5Evolution[t];
-  fMassU8SpentStock[t] += fMassU8Evolution[t];
+  GetStock()->AddMassU5(t, fMassU5Evolution[t]);
+  GetStock()->AddMassU8(t, fMassU8Evolution[t]);
+  
   fMassU5Evolution[t] = 0;
   fMassU8Evolution[t] = 0;
 }
 
-void Reactor::Load(int t){ 
-  // Access to EP stocks
-  vector<double> fMassU5ProductEP = fEnrichmentPlant->GetMassU5Product();
-  vector<double> fMassU8ProductEP = fEnrichmentPlant->GetMassU8Product();
+void Reactor::Load(int t) {
 
-  // Modify Reactor stocks
-  fMassU5Evolution[t] = fMassU5ProductEP[t-1];
-  fMassU8Evolution[t] = fMassU8ProductEP[t-1];
-
-  // Reset EP stocks
-  fMassU5ProductEP[t] = 0;
-  fMassU8ProductEP[t] = 0;
+  // Add mass in Reactor
+  fMassU5Evolution[t] += fMassHN * GetEnrichment();
+  fMassU8Evolution[t] += fMassHN * (1 - GetEnrichment());
+  
+  // Remove Mass in EP
+  GetEnrichmentPlant()->GetProductStock()->RemoveMassU5(t, fMassHN * GetEnrichment());
+  GetEnrichmentPlant()->GetProductStock()->RemoveMassU8(t, fMassHN * (1 - GetEnrichment()));
+  
 }
+
+
+
+
+

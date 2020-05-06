@@ -10,46 +10,74 @@ using namespace std;
 ////////////////////////////////////////////////////////////////
 ///////// Constructeur /////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------
 Stock::Stock(int ScenarioTime) {
-  	fScenarioTime = ScenarioTime;
 
-  	for(int t=0; t<fScenarioTime; t++) {
-    	fMassU5Spent.push_back(0);
-    	fMassU8Spent.push_back(0);
-  	}
-
-	SetName("Stock.");
+  for(int t = 0; t < ScenarioTime; t++) {
+    fMassU5.push_back(0);
+    fMassU8.push_back(0);
+  }
+  
+  SetName("Stock.");
 }
-
-Stock::Stock(double MassUWaste,
-			 int ScenarioTime) {
-  	fScenarioTime = ScenarioTime;
-; 
-  	for(int t=0; t<fScenarioTime; t++) {
-    	fMassU5Waste.push_back(0);
-    	fMassU8Waste.push_back(0);
-  	}
-
-	SetName("Stock.");
-}
-
-Stock::Stock(double MassUFeed,
-             double MineU5UContent,
+// ----------------------------------------------------------
+Stock::Stock(double Mass,
+             double U5Content,
              int ScenarioTime) {
-  	fMassUFeed = MassUFeed;
-  	fMineU5UContent = MineU5UContent;
-
-  	fScenarioTime = ScenarioTime;
-
-  	for(int t=0; t<fScenarioTime; t++) {
-    	fMassU5Feed.push_back(0);
-    	fMassU8Feed.push_back(0);
-  	}
-
-  	SetName("Stock.");
+             
+  SetName("Stock.");
+  
+  for(int t = 0; t < ScenarioTime; t++) {
+    fMassU5.push_back(0);
+    fMassU8.push_back(0);
+  }
+  
+  fMassU5[0] = Mass * U5Content;
+  fMassU8[0] = Mass * (1 - U5Content);
 }
 
 ////////////////////////////////////////////////////////////////
 ///////// Destructeur //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 Stock::~Stock() {}
+
+////////////////////////////////////////////////////////////////
+///////// Fonctions ////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+// ----------------------------------------------------------
+void Stock::RemoveMassU5(int time, double mass) {
+
+  if(fMassU5[time] - mass < 0) {
+    cout << "ERROR in EnrichmentPlant::RemoveMassU5(t,m)" << endl;
+    cout << "You try to remove the mass " << mass << endl;
+    cout << "in the stock " << GetName() << endl;
+    exit(1);
+  }
+  
+  fMassU5[time] = fMassU5[time] - mass;
+}
+// ----------------------------------------------------------
+void Stock::RemoveMassU8(int time, double mass) {
+
+  if(fMassU8[time] - mass < 0) {
+    cout << "ERROR in EnrichmentPlant::RemoveMassU8(t,m)" << endl;
+    cout << "You try to remove the mass " << mass << endl;
+    cout << "in the stock " << GetName() << endl;
+    exit(1);
+  }
+  
+  fMassU8[time] = fMassU8[time] - mass;
+}
+// ----------------------------------------------------------
+void Stock::AddMassU5(int time, double mass) {
+  fMassU5[time] = fMassU5[time] + mass;
+}
+// ----------------------------------------------------------
+void Stock::AddMassU8(int time, double mass) {
+  fMassU8[time] = fMassU8[time] + mass;
+}
+
+
+
+
