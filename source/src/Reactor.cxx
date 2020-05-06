@@ -1,7 +1,6 @@
 #include "Reactor.hxx"
 #include "Stock.hxx"
 #include "EnrichmentPlant.hxx"
-#include "Scenario.hxx"
 
 #include <iostream>
 #include<math.h>
@@ -58,7 +57,7 @@ Reactor::~Reactor() {}
 ///////// Fonctions ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 void Reactor::CalculateU5Enrichment(double BurnUp) {
-  fEnrichissement = 0.0135139 + 0.000563569 * BurnUp 
+  fEnrichment = 0.0135139 + 0.000563569 * BurnUp 
                   + 1.34642e-06 * BurnUp * BurnUp; 
                   // fBurnUp en GWj/t
 }
@@ -107,27 +106,26 @@ void Reactor::Evolution(int t) {
   }
 
 void Reactor::Drain(int t){
-  //Access to stocks
-  vector<double> fMassU5SpentStock = fStock->GetMassU5Spent();
-  vector<double> fMassU8SpentStock = fStock->GetMassU8Spent();
 
-  // Modify stock masses
-  fMassU5SpentStock[t] += fMassU5Evolution[t];
-  fMassU8SpentStock[t] += fMassU8Evolution[t];
+  GetStock()->AddMassU5(t, fMassU5Evolution[t]);
+  GetStock()->AddMassU8(t, fMassU8Evolution[t]);
+
   fMassU5Evolution[t] = 0;
   fMassU8Evolution[t] = 0;
 }
 
 void Reactor::Load(int t){ 
-  // Access to EP stocks
-  vector<double> fMassU5ProductEP = fEnrichmentPlant->GetMassU5Product();
-  vector<double> fMassU8ProductEP = fEnrichmentPlant->GetMassU8Product();
 
-  // Modify Reactor stocks
-  fMassU5Evolution[t] = fMassU5ProductEP[t-1];
-  fMassU8Evolution[t] = fMassU8ProductEP[t-1];
+  // Add mass in Reactor
+  fMassU5Evolution[t] += fMassHN * GetEnrichment();
+  fMassU8Evolution[t] += fMassHN * (1-GetEnrichment());
 
-  // Reset EP stocks
-  fMassU5ProductEP[t] = 0;
-  fMassU8ProductEP[t] = 0;
+  // Remove Mass in EP
+  GetEnrichmentPlant();
+
 }
+
+
+
+
+
