@@ -28,7 +28,7 @@ public :
 		return fLifeTime;
 	}
 	double GetMassHN() {
-		return fMassHN;
+		return fMassHN*1000;
 	}  // Masse de noyaux lourds au début du cycle
 	double GetBurnUp() {
 		return fBurnUp;

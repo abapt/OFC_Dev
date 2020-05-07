@@ -101,9 +101,9 @@ void Reactor::Evolution(int t) {
           + 5.246979e+9 * hourInCycle
           - 2.1964855e+4 * hourInCycle * hourInCycle;
           
-  fMassU5Evolution[t] = fMassU5Evolution[t - 1] *
+  fMassU5Evolution[t] = fMassU5Evolution[t-1] *
                         exp(-fCrossSection * fFlux * DeltaT * 60 * 60);
-  fMassU8Evolution[t] = fMassHN * 1000 - fMassU5Evolution[t];
+  fMassU8Evolution[t] = fMassHN*1000 - fMassU5Evolution[t];
 }
 
 void Reactor::Drain(int t) {
@@ -118,12 +118,12 @@ void Reactor::Drain(int t) {
 void Reactor::Load(int t) {
 
   // Add mass in Reactor
-  fMassU5Evolution[t] += fMassHN * GetEnrichment();
-  fMassU8Evolution[t] += fMassHN * (1 - GetEnrichment());
+  fMassU5Evolution[t] += fMassHN*1000 * GetEnrichment();
+  fMassU8Evolution[t] += fMassHN*1000 * (1 - GetEnrichment());
   
   // Remove Mass in EP
-  GetEnrichmentPlant()->GetProductStock()->RemoveMassU5(t, fMassHN * GetEnrichment());
-  GetEnrichmentPlant()->GetProductStock()->RemoveMassU8(t, fMassHN * (1 - GetEnrichment()));
+  GetEnrichmentPlant()->GetProductStock()->RemoveMassU5(t, fMassHN*1000 * GetEnrichment());
+  GetEnrichmentPlant()->GetProductStock()->RemoveMassU8(t, fMassHN*1000 * (1 - GetEnrichment()));
   
 }
 

@@ -42,15 +42,23 @@ void Scenario::AddEnrichmentPlant(EnrichmentPlant* enrichmentplant) {
 //-----------------------------------------------------------
 void Scenario::Evolution(int t) {
   BuildStatusVector();
-  
 // ----------  Status Loop ----------  //
   for(t = 0; t < fScenarioTime; t++) {
+
     for(int r = 0; r < fReactor.size(); r++) {
+      /*if(t<(R_StartingTime-17531)) {
+        for(int s=0; s<fStock.size(); s++) {
+          fStock[s]->MassConservation(t);
+        }
+      }*/
 
       double ReactorMass = fReactor[r]->GetMassHN();
       double ReactorU5Content = fReactor[r]->GetEnrichment();
 
       if(fStatus[t] == 0) {
+        for(int s=0; s<fStock.size(); s++) {
+          fStock[s]->MassConservation(t);
+        }
         fReactor[r]->Evolution(t); // Evolution under neutron flux
       }
       
@@ -65,14 +73,19 @@ void Scenario::Evolution(int t) {
         // Enrichment of the other half of UNat
         // Push Uapp in Stock Uapp
         // Remove Uenr from EP
+        for(int s=0; s<fStock.size(); s++) {
+          fStock[s]->MassConservation(t);
+        }
         fReactor[r]->GetEnrichmentPlant()->FuelEnrichment(t,
                                                           ReactorMass,
                                                           ReactorU5Content);
-        //fReactor[r]->GetEnrichmentPlant()->PushUApp(t);
         fReactor[r]->Load(t);
       }
       
       if(fStatus[t] == 2) {
+        for(int s=0; s<fStock.size(); s++) {
+          fStock[s]->MassConservation(t);
+        }
         fReactor[r]->Evolution(t); // Evolution under neutron flux
         fReactor[r]->Drain(t); // Push spent uox in stock
         fReactor[r]->GetEnrichmentPlant()->FuelEnrichment(t,
@@ -82,6 +95,9 @@ void Scenario::Evolution(int t) {
       }
       
       if(fStatus[t] == 4) {
+        for(int s=0; s<fStock.size(); s++) {
+          fStock[s]->MassConservation(t);
+        }
         fReactor[r]->Evolution(t); // Evolution under neutron flux
         fReactor[r]->Drain(t); // Push spent uox in stock
       }
@@ -104,7 +120,6 @@ void Scenario::BuildStatusVector() {
     int R_ShutdownTime = (fReactor[r]->GetStartingTime()) +
                          (fReactor[r]->GetLifeTime());
     int R_CycleTime = fReactor[r]->GetCycleTime();
-    
     for(int t = R_StartingTime; t <= R_ShutdownTime; t++) {
 // ----------  Reactor Loop ----------  //
       if(t == R_StartingTime) {
@@ -137,38 +152,37 @@ void Scenario::WriteOutput(string Out) {
       double reactor_U5 = fReactor[r]->GetMassU5React(t);
       double reactor_U8 = fReactor[r]->GetMassU8React(t);
       
-      output << reactor_U5 << " " << reactor_U8 << " ";
+      double U5Spent = fReactor[r]->GetStock()->GetMassU5(t);
+      double U8Spent = fReactor[r]->GetStock()->GetMassU8(t);
+      output << reactor_U5 << " " << reactor_U8 << " " << U5Spent << " " << U8Spent << " ";
     }
     
     for(int e = 0; e < fEnrichmentPlant.size(); e++) {
-      //double EP_U5Waste = fEnrichmentPlant[e]->GetMassU5WasteEP(t);
-      //double EP_U8Waste = fEnrichmentPlant[e]->GetMassU8WasteEP(t);
-/*      
-      double EP_U5Feed = fEnrichmentPlant[e]->GetMassU5FeedEP(t);
-      double EP_U8Feed = fEnrichmentPlant[e]->GetMassU8FeedEP(t);
+      double U5Waste = fEnrichmentPlant[e]->GetWasteStock()->GetMassU5(t);;
+      double U8Waste = fEnrichmentPlant[e]->GetWasteStock()->GetMassU8(t);;
+    
+      double U5Feed = fEnrichmentPlant[e]->GetFeedStock()->GetMassU5(t);
+      double U8Feed = fEnrichmentPlant[e]->GetFeedStock()->GetMassU8(t);
       
-      double EP_U5Product = fEnrichmentPlant[e]->GetMassU5ProductEP(t);
-      double EP_U8Product = fEnrichmentPlant[e]->GetMassU8ProductEP(t);
-      output << EP_U5Feed << " " << EP_U8Feed << " " << EP_U5Product << " " << EP_U8Product << " ";
-      //output << EP_U5Waste << " " << EP_U8Waste << " " << EP_U5Feed << " " << EP_U8Feed << " " << EP_U5Product << " " << EP_U8Product << " ";
-*/
+      double U5Product = fEnrichmentPlant[e]->GetProductStock()->GetMassU5(t);;
+      double U8Product = fEnrichmentPlant[e]->GetProductStock()->GetMassU8(t);;
+      output << U5Product << " " << U8Product << " " << U5Waste << " " << U8Waste << " " << U5Feed << " " << U8Feed;
+
     }
     
-    for(int s = 0; s < fStock.size(); s++) {
-      //double stock_U5Waste = fStock[s]->GetMassU5WasteStock(t);
-      //double stock_U8Waste = fStock[s]->GetMassU8WasteStock(t);
+/*    for(int s = 0; s < fStock.size(); s++) {
+      double stock_U5Waste = fStock[s]->GetMassU5WasteStock(t);
+      double stock_U8Waste = fStock[s]->GetMassU8WasteStock(t);
       
-      //double stock_U5Spent = fStock[s]->GetMassU5SpentStock(t);
-      //double stock_U8Spent = fStock[s]->GetMassU8SpentStock(t);
-      /*
+      double stock_U5Spent = fStock[s]->GetMassU5SpentStock(t);
+      double stock_U8Spent = fStock[s]->GetMassU8SpentStock(t);
+      
       double stock_U5Feed = fStock[s]->GetMassU5FeedStock(t);
       double stock_U8Feed = fStock[s]->GetMassU8FeedStock(t);
       
-      output << stock_U5Feed << " " << stock_U8Feed << endl;
-      //output << stock_U5Waste << " " << stock_U8Waste << " " << stock_U5Spent << " " << stock_U8Spent << " " << stock_U5Feed << " " << stock_U8Feed;
-*/
+      output << stock_U5Waste << " " << stock_U8Waste << " " << stock_U5Spent << " " << stock_U8Spent << " " << stock_U5Feed << " " << stock_U8Feed;
     }
-    
+*/   
     output << endl;
   }
   

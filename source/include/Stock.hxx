@@ -43,6 +43,8 @@ public :
   void RemoveMassU8(int time, double mass);
   void AddMassU8(int time, double mass);
 
+  void MassConservation(int time);
+
 private :
 
   string fName;
