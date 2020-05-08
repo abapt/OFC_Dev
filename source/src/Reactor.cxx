@@ -117,6 +117,7 @@ void Reactor::Drain(int t) {
 
 void Reactor::Load(int t) {
 
+
   // Add mass in Reactor
   fMassU5Evolution[t] += fMassHN*1000 * GetEnrichment();
   fMassU8Evolution[t] += fMassHN*1000 * (1 - GetEnrichment());

@@ -46,20 +46,16 @@ void Scenario::Evolution(int t) {
   for(t = 0; t < fScenarioTime; t++) {
 
     for(int r = 0; r < fReactor.size(); r++) {
-      /*if(t<(R_StartingTime-17531)) {
-        for(int s=0; s<fStock.size(); s++) {
-          fStock[s]->MassConservation(t);
-        }
-      }*/
 
       double ReactorMass = fReactor[r]->GetMassHN();
       double ReactorU5Content = fReactor[r]->GetEnrichment();
 
       if(fStatus[t] == 0) {
+        fReactor[r]->Evolution(t); // Evolution under neutron flux
         for(int s=0; s<fStock.size(); s++) {
           fStock[s]->MassConservation(t);
         }
-        fReactor[r]->Evolution(t); // Evolution under neutron flux
+
       }
       
       if(fStatus[t] == 1) {
@@ -73,24 +69,22 @@ void Scenario::Evolution(int t) {
         // Enrichment of the other half of UNat
         // Push Uapp in Stock Uapp
         // Remove Uenr from EP
+
+
         for(int s=0; s<fStock.size(); s++) {
           fStock[s]->MassConservation(t);
         }
-        fReactor[r]->GetEnrichmentPlant()->FuelEnrichment(t,
-                                                          ReactorMass,
-                                                          ReactorU5Content);
+
         fReactor[r]->Load(t);
       }
       
       if(fStatus[t] == 2) {
+        fReactor[r]->Evolution(t); // Evolution under neutron flux
+        
         for(int s=0; s<fStock.size(); s++) {
           fStock[s]->MassConservation(t);
         }
-        fReactor[r]->Evolution(t); // Evolution under neutron flux
         fReactor[r]->Drain(t); // Push spent uox in stock
-        fReactor[r]->GetEnrichmentPlant()->FuelEnrichment(t,
-                                                          ReactorMass,
-                                                          ReactorU5Content);
         fReactor[r]->Load(t);
       }
       
@@ -98,8 +92,25 @@ void Scenario::Evolution(int t) {
         for(int s=0; s<fStock.size(); s++) {
           fStock[s]->MassConservation(t);
         }
+
         fReactor[r]->Evolution(t); // Evolution under neutron flux
         fReactor[r]->Drain(t); // Push spent uox in stock
+      }
+
+      if(fStatus[t] == 8) {
+        for(int s=0; s<fStock.size(); s++) {
+          fStock[s]->MassConservation(t);
+        }
+
+        fReactor[r]->GetEnrichmentPlant()->FuelEnrichmentProcess(t,
+                                                                 ReactorMass,
+                                                                 ReactorU5Content);
+        
+        fReactor[r]->GetEnrichmentPlant()->TakeFeedMassForFuel(t,
+                                                               ReactorMass,
+                                                               ReactorU5Content);
+        fReactor[r]->Evolution(t);
+
       }
     }
   }
@@ -120,7 +131,9 @@ void Scenario::BuildStatusVector() {
     int R_ShutdownTime = (fReactor[r]->GetStartingTime()) +
                          (fReactor[r]->GetLifeTime());
     int R_CycleTime = fReactor[r]->GetCycleTime();
-    for(int t = R_StartingTime; t <= R_ShutdownTime; t++) {
+    int R_NumberCycle = (R_ShutdownTime - R_StartingTime)/R_CycleTime;
+
+    for(int t = 0; t <= R_ShutdownTime; t++) {
 // ----------  Reactor Loop ----------  //
       if(t == R_StartingTime) {
         fStatus[t] = 1;
@@ -131,11 +144,24 @@ void Scenario::BuildStatusVector() {
       }
       
       if((t > R_StartingTime) &&
-          (t < R_ShutdownTime) &&
-          ((t - R_StartingTime) % (R_CycleTime) == 0))  {
+         (t < R_ShutdownTime) &&
+        ((t - R_StartingTime) % (R_CycleTime) == 0))  {
         fStatus[t] = 2;
       }
+
+      if((t > R_StartingTime) &&
+         (t < R_ShutdownTime) &&
+        ((t - R_StartingTime) % (R_CycleTime) == 0))  {
+        fStatus[t] = 2;
+      }
+
+      for(int n = 0; n <= R_NumberCycle; n++) {
+        if(t == (R_StartingTime + n*R_CycleTime - 17532)) {fStatus[t] = 8;}
+      }
     }
+  }
+  for (int t=0; t<fScenarioTime; t++) {
+    if (fStatus[t] >0) {cout << t << " " <<fStatus[t] <<endl;}
   }
 }
 

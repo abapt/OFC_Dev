@@ -34,7 +34,7 @@ public :
 	// Main function for enrichment
 	// Step 1 : TakeFeedMassForFuel
 	// Step 2 : progressive Enrichment process and Push waste
-	void FuelEnrichment(int time, double ReactorMass, double U5ContentInUProduct);
+	
 	// Take the required mass in Feed stock
 	void TakeFeedMassForFuel(int time, double ReactorMass, double U5ContentInUProduct);
 	// Take the required mass in Feed stock
@@ -46,7 +46,8 @@ public :
 	void RemoveMassU8(int time, double mass);
 	void AddMassU8(int time, double mass);
 	
-	
+	void MassConservation(int time);
+
 private :
 	string fName;
 	
