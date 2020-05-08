@@ -52,10 +52,10 @@ void Scenario::Evolution(int t) {
 
       if(fStatus[t] == 0) {
         fReactor[r]->Evolution(t); // Evolution under neutron flux
+
         for(int s=0; s<fStock.size(); s++) {
           fStock[s]->MassConservation(t);
         }
-
       }
       
       if(fStatus[t] == 1) {
@@ -70,7 +70,6 @@ void Scenario::Evolution(int t) {
         // Push Uapp in Stock Uapp
         // Remove Uenr from EP
 
-
         for(int s=0; s<fStock.size(); s++) {
           fStock[s]->MassConservation(t);
         }
@@ -84,6 +83,7 @@ void Scenario::Evolution(int t) {
         for(int s=0; s<fStock.size(); s++) {
           fStock[s]->MassConservation(t);
         }
+
         fReactor[r]->Drain(t); // Push spent uox in stock
         fReactor[r]->Load(t);
       }
@@ -102,13 +102,12 @@ void Scenario::Evolution(int t) {
           fStock[s]->MassConservation(t);
         }
 
-        fReactor[r]->GetEnrichmentPlant()->FuelEnrichmentProcess(t,
-                                                                 ReactorMass,
-                                                                 ReactorU5Content);
-        
         fReactor[r]->GetEnrichmentPlant()->TakeFeedMassForFuel(t,
                                                                ReactorMass,
                                                                ReactorU5Content);
+        fReactor[r]->GetEnrichmentPlant()->FuelEnrichmentProcess(t,
+                                                                 ReactorMass,
+                                                                 ReactorU5Content);
         fReactor[r]->Evolution(t);
 
       }
