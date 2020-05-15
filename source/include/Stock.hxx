@@ -29,12 +29,18 @@ public :
   vector<double> GetMassU8() {
     return fMassU8; // U8 in stock
   }
+  vector<double> GetMassOther() {
+  	return fMassOther;
+  }
   
   double GetMassU5(int t) {
     return fMassU5[t];
   }
   double GetMassU8(int t) {
     return fMassU8[t];
+  }
+  double GetMassOther(int t) {
+  	return fMassOther[t];
   }
 
   void RemoveMassU5(int time, double mass);
@@ -44,6 +50,7 @@ public :
   void AddMassU8(int time, double mass);
 
   void MassConservation(int time);
+  void AddMassOther(int time, double mass);
 
 private :
 
@@ -51,6 +58,7 @@ private :
   
   vector<double> fMassU5;
   vector<double> fMassU8;
+  vector<double> fMassOther;
   
 };
 

@@ -44,7 +44,6 @@ void Scenario::Evolution(int t) {
   BuildStatusVector();
 // ----------  Status Loop ----------  //
   for(t = 0; t < fScenarioTime; t++) {
-
     for(int r = 0; r < fReactor.size(); r++) {
 
       double ReactorMass = fReactor[r]->GetMassHN();
@@ -75,6 +74,7 @@ void Scenario::Evolution(int t) {
         }
 
         fReactor[r]->Load(t);
+        cout << t << " stat 1 - Load" << endl;
       }
       
       if(fStatus[t] == 2) {
@@ -85,7 +85,10 @@ void Scenario::Evolution(int t) {
         }
 
         fReactor[r]->Drain(t); // Push spent uox in stock
+        cout << t << " stat 2 - Drain" << endl;
         fReactor[r]->Load(t);
+        cout << t << " stat 2 - Load" << endl;
+
       }
       
       if(fStatus[t] == 4) {
@@ -94,7 +97,9 @@ void Scenario::Evolution(int t) {
         }
 
         fReactor[r]->Evolution(t); // Evolution under neutron flux
+        cout << t << " stat 4 - Evo" << endl;
         fReactor[r]->Drain(t); // Push spent uox in stock
+        cout << t << " stat 4 - Drain" << endl;
       }
 
       if(fStatus[t] == 8) {
@@ -159,9 +164,9 @@ void Scenario::BuildStatusVector() {
       }
     }
   }
-  for (int t=0; t<fScenarioTime; t++) {
+  /*for (int t=0; t<fScenarioTime; t++) {
     if (fStatus[t] >0) {cout << t << " " <<fStatus[t] <<endl;}
-  }
+  }*/
 }
 
 //-----------------------------------------------------------

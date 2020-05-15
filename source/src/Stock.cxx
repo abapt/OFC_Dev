@@ -16,6 +16,7 @@ Stock::Stock(int ScenarioTime) {
   for(int t = 0; t < ScenarioTime; t++) {
     fMassU5.push_back(0);
     fMassU8.push_back(0);
+    fMassOther.push_back(0);
   }
   
   SetName("Stock.");
@@ -54,6 +55,10 @@ void Stock::MassConservation(int time) {
 	}
 }
 
+// ----------------------------------------------------------
+void Stock::AddMassOther(int time, double mass) {
+	fMassOther[time] += mass;
+}
 
 // ----------------------------------------------------------
 void Stock::RemoveMassU5(int time, double mass) {

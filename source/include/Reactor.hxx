@@ -42,8 +42,11 @@ public :
 	double GetEnrichment() {
 		return fEnrichment;
 	}
-	double GetCrossSection() {
-		return fCrossSection;  // recup cross section
+	double GetCrossSectionU5() {
+		return fCrossSectionU5;  // recup cross section
+	}
+	double GetCrossSectionU8() {
+		return fCrossSectionU8;  // recup cross section
 	}
 	int GetCycleTime() {
 		return fCycleTime; // recup cycle Time
@@ -62,6 +65,7 @@ public :
 	double GetMassU8React(int t){
 		return fMassU8Evolution[t];
 	}
+	
 
 
  	EnrichmentPlant* GetEnrichmentPlant() {
@@ -111,7 +115,8 @@ private :
 	double fLoadFactor;
 	double fBurnUp;
 	double fEnrichment;
-	double fCrossSection;
+	double fCrossSectionU5;
+	double fCrossSectionU8;
 
 	EnrichmentPlant* fEnrichmentPlant;
 	Stock* fStock;
@@ -120,6 +125,7 @@ private :
 	double fFlux;
 	vector<double> fMassU5Evolution;
 	vector<double> fMassU8Evolution;
+	vector<double> fMassOtherEvolution;
 };
 
 #endif

@@ -99,7 +99,7 @@ void EnrichmentPlant::FuelEnrichmentProcess(int time,
                        (U5ContentInUProduct - fU5ContentInUWaste);
                      
   	double URequiredMassFromFeed = ReactorMass / Rendement;
-  	//cout << U5ContentInUProduct << endl;
+  	//cout << URequiredMassFromFeed << endl;
   
   	double MassOfFeedInT = URequiredMassFromFeed;
     //cout << MassOfFeedInT << endl;
